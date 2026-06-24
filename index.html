@@ -358,8 +358,7 @@
 <!-- HEADER -->
 <header class="header">
   <div class="header-photo">
-    <!-- 可替換為 <img src="photo.jpg" alt="廖常智"> -->
-    👤
+    <img src="photo.jpg" alt="廖常智">
   </div>
   <div class="header-info">
     <h1>廖常智 <span>LIAO CHANG CHIH</span></h1>
@@ -459,7 +458,7 @@
       <div class="section-title"><span class="icon">🌐</span>語言能力</div>
       <div style="font-size:0.83rem; color:var(--text);">
         <div style="margin-bottom:5px;">中文 — 母語</div>
-        <div>英文 — TOEIC 備考中</div>
+        <div>英文 — TOEIC 680 分</div>
       </div>
     </div>
 
@@ -549,6 +548,58 @@
           <li><strong>社群行銷整合</strong>：整合 QR Code 導流機制並串接 Facebook 粉絲專頁，強化跨平台行銷曝光與使用者互動體驗。</li>
         </ul>
       </div>
+
+      <!-- 多人即時數學搶答遊戲 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name">多人即時數學搶答遊戲網頁</div>
+          <span class="project-tag">Firebase / Web</span>
+        </div>
+        <ul class="project-bullets">
+          <li><strong>獨立全端開發</strong>：設計具房間系統的即時多人對戰遊戲，以 Firebase Realtime Database 處理跨客戶端同步，已部署上線可多人同時連線。</li>
+          <li><strong>核心功能</strong>：建立／加入房間、即時搶答計分、三維排行榜（勝場／積分／場數）。</li>
+          <li><strong>技術棧</strong>：HTML / CSS / JavaScript、Firebase Auth & Realtime DB、GitHub Pages。</li>
+          <li><strong>線上展示</strong>：<a href="https://claude-test-fd4c1.web.app/" target="_blank" style="color:var(--accent);">claude-test-fd4c1.web.app</a></li>
+        </ul>
+      </div>
+
+      <!-- AI 影片製作自動化流水線 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name">AI 影片製作自動化流水線</div>
+          <span class="project-tag">Python / AI</span>
+        </div>
+        <ul class="project-bullets">
+          <li><strong>完整後製自動化</strong>：建立從原始錄製到 YouTube 上架的全流程自動化系統，實際應用於幼兒園教保課程設計系列教學影片製作。</li>
+          <li><strong>技術整合</strong>：auto-editor 智慧剪輯（自動去除靜音段落）、Groq Whisper 語音轉字幕、Claude AI 字幕精修、edge-TTS 旁白生成、YouTube 標題自動產出。</li>
+          <li><strong>技術棧</strong>：Python、FFmpeg、auto-editor、Groq API、Claude API。</li>
+        </ul>
+      </div>
+
+      <!-- NotebookLM 深度研究自動化 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name">NotebookLM 深度研究自動化系統</div>
+          <span class="project-tag">Claude Code / Automation</span>
+        </div>
+        <ul class="project-bullets">
+          <li><strong>全流程自動化</strong>：以 Claude Code Agent 自動化 NotebookLM Deep Research 完整流程，排程執行：自動啟動研究 → 等待完成（5 階段）→ 匯入 44+ 筆資料來源 → 輸出 Word / PPTX 文件。</li>
+          <li><strong>穩定運行</strong>：已累積 20+ 次定期執行，驗證系統可靠性。</li>
+          <li><strong>技術棧</strong>：Claude Code、Chrome 瀏覽器自動化、Firebase、排程任務管理。</li>
+        </ul>
+      </div>
+
+      <!-- YouTube 頻道知識庫 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name">YouTube 頻道知識庫自動建置系統</div>
+          <span class="project-tag">Python / Knowledge Mgmt</span>
+        </div>
+        <ul class="project-bullets">
+          <li><strong>自動化爬取與分類</strong>：自動抓取指定 YouTube 頻道影片字幕，建立 Obsidian 三層結構化知識庫；下載 36 支影片字幕，依主題分類（Claude 系列／AntiGravity 系列／OpenCode 系列）並自動生成索引。</li>
+          <li><strong>技術棧</strong>：Python、yt-dlp、Obsidian、知識管理架構設計。</li>
+        </ul>
+      </div>
     </div>
 
     <!-- 證照 -->
@@ -613,11 +664,35 @@
           <div class="cert-issuer">財團法人中華民國電腦技能基金會</div>
         </div>
 
+        <div class="cert-section-label">Google 教育認證</div>
+
+        <div class="cert-item highlight">
+          <div class="cert-name">Google 認證教育家 第一級</div>
+          <div class="cert-issuer">Google</div>
+        </div>
+
+        <div class="cert-item highlight">
+          <div class="cert-name">Google 認證教育家 第二級</div>
+          <div class="cert-issuer">Google</div>
+        </div>
+
         <div class="cert-section-label">英語</div>
 
         <div class="cert-item">
-          <div class="cert-name">TOEIC 多益測驗</div>
-          <div class="cert-issuer">ETS</div>
+          <div class="cert-name">TOEIC 多益測驗 — 680 分</div>
+          <div class="cert-issuer">ETS 美國教育測驗服務社</div>
+        </div>
+
+        <div class="cert-section-label">體育 / 其他</div>
+
+        <div class="cert-item">
+          <div class="cert-name">C 級籃球教練</div>
+          <div class="cert-issuer">中華民國籃球協會</div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-name">籃球協會紀錄台講習認證</div>
+          <div class="cert-issuer">中華民國籃球協會</div>
         </div>
 
       </div>
