@@ -339,12 +339,30 @@
     }
 
     /* ── RESP ── */
+    @media (max-width: 900px) {
+      .main { grid-template-columns: 240px 1fr; }
+    }
+
     @media (max-width: 768px) {
-      .header { flex-direction: column; text-align: center; padding: 28px 20px; }
-      .main { grid-template-columns: 1fr; }
-      .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+      .header { flex-direction: column; align-items: center; text-align: center; padding: 24px 16px; gap: 18px; }
+      .header-photo { width: 90px; height: 90px; font-size: 32px; }
+      .header-info h1 { font-size: 1.5rem; }
+      .main { grid-template-columns: 1fr; max-width: 100%; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--border); padding: 20px 16px; }
+      .content { padding: 20px 16px; }
       .cert-grid { grid-template-columns: 1fr; }
-      .tl-header { flex-direction: column; }
+      .tl-header { flex-direction: column; gap: 2px; }
+      .project-header { flex-direction: column; gap: 4px; }
+      .project-card { padding: 12px 14px; }
+      .tags { gap: 4px; }
+    }
+
+    @media (max-width: 480px) {
+      .header-info h1 { font-size: 1.2rem; letter-spacing: 1px; }
+      .header-info h1 span { display: block; margin-left: 0; margin-top: 4px; font-size: 0.85rem; }
+      .section-title { font-size: 0.72rem; }
+      .tl-org { font-size: 0.88rem; }
+      .project-name { font-size: 0.85rem; }
     }
 
     @media print {
@@ -362,7 +380,6 @@
   </div>
   <div class="header-info">
     <h1>廖常智 <span>LIAO CHANG CHIH</span></h1>
-    <div class="title">助理工程師 ／ 碩士研究生</div>
   </div>
 </header>
 
@@ -387,10 +404,6 @@
       <div class="contact-item">
         <span class="ci-icon">📍</span>
         <span>台北市信義區</span>
-      </div>
-      <div class="contact-item">
-        <span class="ci-icon">🐙</span>
-        <a href="https://github.com/jackyliao31-ops" style="color:inherit;">github.com/jackyliao31-ops</a>
       </div>
     </div>
 
@@ -666,12 +679,12 @@
 
         <div class="cert-section-label">Google 教育認證</div>
 
-        <div class="cert-item highlight">
+        <div class="cert-item">
           <div class="cert-name">Google 認證教育家 第一級</div>
           <div class="cert-issuer">Google</div>
         </div>
 
-        <div class="cert-item highlight">
+        <div class="cert-item">
           <div class="cert-name">Google 認證教育家 第二級</div>
           <div class="cert-issuer">Google</div>
         </div>
