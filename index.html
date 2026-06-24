@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>廖常智 Jacky Liao — 履歷</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dark: #1a2636;
+      --accent: #2196f3;
+      --accent2: #00bcd4;
+      --light-bg: #f4f6f9;
+      --text: #2d3748;
+      --muted: #718096;
+      --border: #e2e8f0;
+      --tag-bg: #eaf4fe;
+      --tag-color: #1565c0;
+    }
+
+    body {
+      font-family: "Noto Sans TC", "Segoe UI", sans-serif;
+      background: var(--light-bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #0f1e30 0%, #1a3a5c 60%, #1565c0 100%);
+      color: #fff;
+      padding: 36px 48px 32px;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .header-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.35);
+      object-fit: cover;
+      background: #2a4a6d;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      color: rgba(255,255,255,0.6);
+      overflow: hidden;
+    }
+
+    .header-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .header-info h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .header-info h1 span {
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.75);
+      margin-left: 12px;
+    }
+
+    .header-info .title {
+      margin-top: 6px;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 1px;
+    }
+
+    .header-info .tagline {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      font-style: italic;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: #fff;
+      padding: 28px 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      background: var(--light-bg);
+      padding: 28px 32px;
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 28px; }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 5px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .section-title .icon { font-size: 1rem; }
+
+    /* ── CONTACT ── */
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 9px;
+      font-size: 0.83rem;
+      color: var(--text);
+      word-break: break-all;
+    }
+
+    .contact-item .ci-icon {
+      width: 18px;
+      flex-shrink: 0;
+      color: var(--accent);
+      margin-top: 1px;
+    }
+
+    /* ── SKILL TAGS ── */
+    .tag-group { margin-bottom: 10px; }
+    .tag-group-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .tag {
+      background: var(--tag-bg);
+      color: var(--tag-color);
+      font-size: 0.72rem;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    /* ── ABOUT ── */
+    .about-text {
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    /* ── TIMELINE ── */
+    .timeline-item {
+      position: relative;
+      padding-left: 18px;
+      padding-bottom: 20px;
+      border-left: 2px solid var(--border);
+      margin-bottom: 0;
+    }
+
+    .timeline-item:last-child { border-left: 2px solid transparent; }
+
+    .timeline-item::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: absolute;
+      left: -6px;
+      top: 4px;
+    }
+
+    .tl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .tl-org {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .tl-date {
+      font-size: 0.78rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .tl-role {
+      font-size: 0.82rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .tl-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .tl-bullets {
+      margin-top: 8px;
+      padding-left: 16px;
+    }
+
+    .tl-bullets li {
+      font-size: 0.83rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .tl-bullets li strong { color: var(--dark); }
+
+    /* ── PROJECTS ── */
+    .project-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+
+    .project-card:last-child { margin-bottom: 0; }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .project-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .project-tag {
+      font-size: 0.7rem;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .project-desc {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .project-bullets {
+      margin-top: 8px;
+      padding-left: 16px;
+    }
+
+    .project-bullets li {
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    /* ── CERT GRID ── */
+    .cert-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .cert-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .cert-item.highlight {
+      border-color: var(--accent);
+      background: var(--tag-bg);
+    }
+
+    .cert-name {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .cert-issuer {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .cert-section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      text-transform: uppercase;
+      margin: 12px 0 6px;
+      grid-column: 1 / -1;
+    }
+
+    /* ── RESP ── */
+    @media (max-width: 768px) {
+      .header { flex-direction: column; text-align: center; padding: 28px 20px; }
+      .main { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+      .cert-grid { grid-template-columns: 1fr; }
+      .tl-header { flex-direction: column; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .main { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-photo">
+    <!-- 可替換為 <img src="photo.jpg" alt="廖常智"> -->
+    👤
+  </div>
+  <div class="header-info">
+    <h1>廖常智 <span>LIAO CHANG CHIH</span></h1>
+    <div class="title">助理工程師 ／ 碩士研究生</div>
+    <div class="tagline">專注實作，讓成果說話。</div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- 聯絡資訊 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">📌</span>聯絡資訊</div>
+
+      <div class="contact-item">
+        <span class="ci-icon">📞</span>
+        <span>0928-135-236</span>
+      </div>
+      <div class="contact-item">
+        <span class="ci-icon">✉️</span>
+        <span>jackyliao31@gmail.com</span>
+      </div>
+      <div class="contact-item">
+        <span class="ci-icon">📍</span>
+        <span>台北市信義區</span>
+      </div>
+      <div class="contact-item">
+        <span class="ci-icon">🐙</span>
+        <a href="https://github.com/jackyliao31-ops" style="color:inherit;">github.com/jackyliao31-ops</a>
+      </div>
+    </div>
+
+    <!-- 技能 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">⚙️</span>技能</div>
+
+      <div class="tag-group">
+        <div class="tag-group-label">程式語言</div>
+        <div class="tags">
+          <span class="tag">Python</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">HTML5 / CSS</span>
+          <span class="tag">SQL</span>
+          <span class="tag">GAS</span>
+        </div>
+      </div>
+
+      <div class="tag-group">
+        <div class="tag-group-label">AI / Agent</div>
+        <div class="tags">
+          <span class="tag">Claude Code</span>
+          <span class="tag">RAG</span>
+          <span class="tag">MCP</span>
+          <span class="tag">NotebookLM</span>
+          <span class="tag">Gemini</span>
+          <span class="tag">OpenAI</span>
+        </div>
+      </div>
+
+      <div class="tag-group">
+        <div class="tag-group-label">全端 / 資料庫</div>
+        <div class="tags">
+          <span class="tag">Firebase</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">Firestore</span>
+          <span class="tag">Google Sheets</span>
+        </div>
+      </div>
+
+      <div class="tag-group">
+        <div class="tag-group-label">開發工具</div>
+        <div class="tags">
+          <span class="tag">GitHub</span>
+          <span class="tag">VS Code</span>
+          <span class="tag">Obsidian</span>
+          <span class="tag">Google Drive</span>
+          <span class="tag">Docker</span>
+        </div>
+      </div>
+
+      <div class="tag-group">
+        <div class="tag-group-label">辦公應用</div>
+        <div class="tags">
+          <span class="tag">Google Workspace</span>
+          <span class="tag">Microsoft Office</span>
+          <span class="tag">Power BI</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 語言能力 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🌐</span>語言能力</div>
+      <div style="font-size:0.83rem; color:var(--text);">
+        <div style="margin-bottom:5px;">中文 — 母語</div>
+        <div>英文 — TOEIC 備考中</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- 個人簡介 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">👤</span>個人簡介</div>
+      <p class="about-text">
+        您好，我是廖常智，畢業於國立臺北護理健康大學資訊管理系，目前就讀國立臺北科技大學技術及職業教育研究所（數位學習組）碩士班。現任神通資訊科技股份有限公司助理工程師，熟悉 AI Agent 工作流設計、全端網頁開發與自動化數據工程。擅長整合多代理人系統與 RAG 知識庫，並以 Firebase／Supabase 實現前後端資料持久化，致力於以實作成果驅動教學與工程創新。
+      </p>
+    </div>
+
+    <!-- 工作經驗 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">💼</span>工作經驗</div>
+
+      <div class="timeline-item">
+        <div class="tl-header">
+          <div class="tl-org">神通資訊科技股份有限公司</div>
+          <div class="tl-date">2025/04 ～ 2025/09</div>
+        </div>
+        <div class="tl-role">助理工程師（軟韌體測試）</div>
+        <div class="tl-sub">台北市內湖區 ・ 電腦系統整合服務業（500人以上）</div>
+        <ul class="tl-bullets">
+          <li>執行軟韌體系統整合測試，驗證功能完整性與邊界條件，協助產品品質把關。</li>
+          <li>（詳細專案成果待補充）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 學歷 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🎓</span>學歷</div>
+
+      <div class="timeline-item">
+        <div class="tl-header">
+          <div class="tl-org">國立臺北科技大學</div>
+          <div class="tl-date">2025/09 ～ 2027/06（預）</div>
+        </div>
+        <div class="tl-role">技術及職業教育研究所 ─ 碩士日間就讀中（數位學習組）</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-header">
+          <div class="tl-org">國立臺北護理健康大學</div>
+          <div class="tl-date">2021/09 ～ 2025/06</div>
+        </div>
+        <div class="tl-role">資訊管理學系 ─ 大學畢業</div>
+      </div>
+    </div>
+
+    <!-- 專案經歷 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🚀</span>專案經歷</div>
+
+      <!-- Antigravity -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name">Antigravity — AI Agent 工作流平台</div>
+          <span class="project-tag">AI / Automation</span>
+        </div>
+        <div class="project-desc">整合多代理人系統與 RAG 知識庫的自動化工程平台，涵蓋全端網頁開發、AI 影音自動產出。</div>
+        <ul class="project-bullets">
+          <li><strong>多代理人調度</strong>：熟練操作與評測 Claude Code、OpenCode、GPT-CodeX、AntiGravity 2.0 等前沿 Agent，執行複雜任務分解與自動化流程。</li>
+          <li><strong>零門檻環境建置</strong>：設計基於 Markdown 的工作區配置懶人包，自動檢查 Node.js、Git、API 金鑰，實現開箱即用部署。</li>
+          <li><strong>RAG 知識庫整合</strong>：串接 Google NotebookLM、Obsidian 第二大腦、Google Drive 與 GitHub，打造會自動同步與成長的個人知識系統。</li>
+          <li><strong>全端資料持久化</strong>：透過 MCP 以自然語言操控 Supabase 與 Firebase，實現前後端無縫整合；另開發多人連線對戰遊戲、QR Code 產生器等互動式網頁工具。</li>
+          <li><strong>AI 影音全自動產出</strong>：整合 Hyperframes 等多個 AI Agent，實現腳本撰寫、畫面生成、配音到剪輯的完整自動化工作流。</li>
+          <li><strong>自動化資料工程</strong>：編寫 Python 腳本自動抓取影片字幕、擷取摘要並生成結構化知識庫索引（build_knowledge_base.py）。</li>
+          <li><strong>HTML5 動態簡報</strong>：以 HTML5 / CSS / JS 製作具備即時互動元件的高質感教學簡報系統，取代傳統 PPT。</li>
+        </ul>
+      </div>
+
+      <!-- Gemini Landing Page -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name">房仲服務入口網 — 台灣房仲單頁式 Landing Page</div>
+          <span class="project-tag">Web / GAS</span>
+        </div>
+        <ul class="project-bullets">
+          <li><strong>響應式前端開發</strong>：打造包含頂部導覽列、Hero 首屏視覺、服務說明、精選物件展示與聯絡表單的完整單頁式網站，建立專業品牌形象。</li>
+          <li><strong>GAS 後端自動化 CRM</strong>：運用 Google Apps Script 的 <code>doGet</code>／<code>doPost</code> 函式進行部署與前後端資料傳輸，將聯絡表單即時寫入 Google 試算表，達成 CRM 名單自動化收集。</li>
+          <li><strong>社群行銷整合</strong>：整合 QR Code 導流機制並串接 Facebook 粉絲專頁，強化跨平台行銷曝光與使用者互動體驗。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 證照 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">📜</span>證照與認證</div>
+
+      <div class="cert-grid">
+
+        <div class="cert-section-label">專案 / 資訊管理</div>
+
+        <div class="cert-item highlight">
+          <div class="cert-name">C 級一般專案經理</div>
+          <div class="cert-issuer">APMA 美國專案管理學會</div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-name">醫學資訊管理師</div>
+          <div class="cert-issuer">醫療資訊管理相關機構</div>
+        </div>
+
+        <div class="cert-section-label">Google AI 系列</div>
+
+        <div class="cert-item highlight">
+          <div class="cert-name">Gemini 認證教師證書</div>
+          <div class="cert-issuer">Google</div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-name">Generative AI Explorer — Vertex AI</div>
+          <div class="cert-issuer">Google</div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-name">大型語言模型 (LLM) 課程認證</div>
+          <div class="cert-issuer">Google</div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-name">生成式 AI 課程認證</div>
+          <div class="cert-issuer">Google</div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-name">Generative AI Studio</div>
+          <div class="cert-issuer">Google</div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-name">負責任的 AI 技術課程認證</div>
+          <div class="cert-issuer">Google</div>
+        </div>
+
+        <div class="cert-section-label">TQC / EEC</div>
+
+        <div class="cert-item">
+          <div class="cert-name">EEC-企業電子化助理規劃師</div>
+          <div class="cert-issuer">財團法人中華民國電腦技能基金會</div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-name">TQC-DK 電子商務概論</div>
+          <div class="cert-issuer">財團法人中華民國電腦技能基金會</div>
+        </div>
+
+        <div class="cert-section-label">英語</div>
+
+        <div class="cert-item">
+          <div class="cert-name">TOEIC 多益測驗</div>
+          <div class="cert-issuer">ETS</div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>
