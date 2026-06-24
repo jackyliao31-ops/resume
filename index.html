@@ -328,6 +328,24 @@
       margin-top: 2px;
     }
 
+    /* ── PUBLICATIONS ── */
+    .pub-list {
+      list-style: disc;
+      padding-left: 18px;
+    }
+
+    .pub-list li {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .pub-title {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
     .cert-section-label {
       font-size: 0.72rem;
       font-weight: 700;
@@ -536,21 +554,16 @@
     <!-- 學術發表 -->
     <div class="section">
       <div class="section-title"><span class="icon">📄</span>學術發表</div>
-
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-name">Vibe Coding 與師資培育中的互動模擬教材設計</div>
-          <span class="project-tag">期刊論文</span>
-        </div>
-        <div class="project-desc" style="margin-top:8px; color:var(--text);">
-          <strong>廖常智</strong>、指導教授（合著）・ 臺灣教育評論月刊，2026，15（6），頁 79-82
-        </div>
-        <ul class="project-bullets" style="margin-top:8px;">
-          <li>探討 Vibe Coding 作為新興 AI 輔助開發方法在師資培育課程中的應用，以 AIPACK 框架（AIK、CK、PK）分析教師 AI 素養與課程設計能力的整合路徑。</li>
-          <li>設計具互動性與可擴充性的教學模擬教材，驗證 Claude Code、ChatGPT Codex、Gemini Canvas 等 AI 工具在課程設計實作中的教學效益。</li>
-          <li><a href="https://github.com/jackyliao31-ops/vibe-coding-journal" target="_blank" style="color:var(--accent);">github.com/jackyliao31-ops/vibe-coding-journal</a></li>
-        </ul>
-      </div>
+      <ul class="pub-list">
+        <li>
+          <span class="pub-title">「Vibe Coding 與師資培育中的互動模擬教材設計」</span>，
+          臺灣教育評論月刊，15，6，79-82，2026/06
+        </li>
+        <li>
+          <span class="pub-title">「生成式 AI 在大專院校工程教育中的挑戰與潛力」</span>，
+          臺灣教育評論月刊，13，5，58-63，2024/05，ELSE1
+        </li>
+      </ul>
     </div>
 
     <!-- 專案經歷 -->
