@@ -384,8 +384,12 @@
     }
 
     @media print {
+      @page { size: A4; margin: 12mm 10mm; }
       body { background: #fff; }
       .main { max-width: 100%; }
+      .section-title, .tl-header, .tl-role, .tl-sub { break-after: avoid; }
+      .tl-header, .tl-bullets li, .project-card, .cert-grid, .pub-list li { break-inside: avoid; }
+      .cert-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -436,47 +440,58 @@
           <span class="tag">JavaScript</span>
           <span class="tag">HTML5 / CSS</span>
           <span class="tag">SQL</span>
-          <span class="tag">GAS</span>
+          <span class="tag">Google Apps Script</span>
         </div>
       </div>
 
       <div class="tag-group">
-        <div class="tag-group-label">AI / Agent</div>
+        <div class="tag-group-label">AI / LLM</div>
         <div class="tags">
           <span class="tag">Claude Code</span>
-          <span class="tag">RAG</span>
-          <span class="tag">MCP</span>
+          <span class="tag">Codex</span>
+          <span class="tag">Gemini API</span>
+          <span class="tag">Ollama</span>
           <span class="tag">NotebookLM</span>
-          <span class="tag">Gemini</span>
-          <span class="tag">OpenAI</span>
+          <span class="tag">MCP</span>
+          <span class="tag">RAG</span>
+          <span class="tag">Prompt Engineering</span>
         </div>
       </div>
 
       <div class="tag-group">
-        <div class="tag-group-label">全端 / 資料庫</div>
+        <div class="tag-group-label">流程自動化 / 整合</div>
         <div class="tags">
-          <span class="tag">Firebase</span>
-          <span class="tag">Supabase</span>
-          <span class="tag">Firestore</span>
-          <span class="tag">Google Sheets</span>
+          <span class="tag">n8n</span>
+          <span class="tag">Webhook</span>
+          <span class="tag">Google Chat API</span>
+          <span class="tag">OAuth</span>
+          <span class="tag">clasp</span>
         </div>
       </div>
 
       <div class="tag-group">
-        <div class="tag-group-label">開發工具</div>
+        <div class="tag-group-label">企業系統 / 資料庫</div>
+        <div class="tags">
+          <span class="tag">Odoo 19 ERP</span>
+          <span class="tag">Google Sheets</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">Firebase</span>
+        </div>
+      </div>
+
+      <div class="tag-group">
+        <div class="tag-group-label">部署 / 協作</div>
         <div class="tags">
           <span class="tag">GitHub</span>
-          <span class="tag">VS Code</span>
-          <span class="tag">Obsidian</span>
-          <span class="tag">Google Drive</span>
-          <span class="tag">Docker</span>
+          <span class="tag">Docker Compose</span>
+          <span class="tag">GCP</span>
+          <span class="tag">Google Workspace</span>
         </div>
       </div>
 
       <div class="tag-group">
         <div class="tag-group-label">辦公應用</div>
         <div class="tags">
-          <span class="tag">Google Workspace</span>
           <span class="tag">Microsoft Office</span>
           <span class="tag">Power BI</span>
         </div>
@@ -501,19 +516,31 @@
     <div class="section">
       <div class="section-title"><span class="icon">👤</span>個人簡介</div>
       <p class="about-text">
-        你好，我是廖常智，國立臺北科技大學技術及職業教育研究所（數位學習組）碩士生，研究聚焦於生成式 AI 應用開發。目前我與指導教授合著的期刊〈Vibe Coding 與師資培育中的互動模擬教材設計〉已於 2026 年 6 月發表。2026 年 8 月完成台灣積體電路製造（TSMC）新人培訓中心「設備元件機台基礎」32 小時研習認證。
-      </p>
-      <p class="about-text" style="margin-top:10px;">
-        在工具開發面，我熟練操作 Claude Code、OpenCode、GPT-CodeX（Codex App）、AntiGravity 2.0 等多款前沿 AI Agent，並以此為主力完成多個具實際運行的專案。自動化工程方面，我建立了 AI 影片製作全流程流水線（串接 Groq Whisper、Claude API、edge-TTS，涵蓋剪輯、字幕、旁白），並以 Claude Code Agent 驅動瀏覽器自動化，打造 NotebookLM 深度研究排程系統（44+ 筆來源匯入、20+ 次穩定執行）。全端開發方面，我獨立完成多人即時數學搶答遊戲（Firebase Realtime DB、三維排行榜、已上線）、整合 Google Apps Script 後端的房仲服務 Landing Page（含自動化 CRM 表單寫入與 QR Code 行銷串接），以及 YouTube 頻道字幕自動抓取與 Obsidian 三層知識庫建置系統。
-      </p>
-      <p class="about-text" style="margin-top:10px;">
-        此外，我設計了基於 Markdown 的工作區配置檔，實現多 Agent 環境的零門檻自動部署，並打造跨 NotebookLM、Obsidian、Google Drive、GitHub 的個人知識同步系統。我習慣將日常研究或學習流程中遇到的重複性問題，直接轉化為可自動化運行的工具。技術涵蓋 Python、JavaScript、Firebase、FFmpeg、Claude API 與瀏覽器自動化。
+        國立臺北科技大學技術及職業教育研究所（數位學習組）碩士生，現任成鼎電工實業營運部數位流程 AI 應用員（實習兼職）。專長是把部門重複的彙整與追蹤工作，做成可排程、可交接、跨部門可用的自動化工具，並同步撰寫操作手冊、負責教育訓練。在職期間以 Claude Code 為主要開發工具，交付工程驗收管理系統、部門日誌總結工具與 Google Chat 問答機器人，並參與 Odoo 19 ERP 導入。研究聚焦生成式 AI 在教學與訓練的應用，與指導教授合著的期刊論文已於 2026 年 6 月發表。
       </p>
     </div>
 
-    <!-- 實習經驗 -->
+    <!-- 工作經歷 -->
     <div class="section">
-      <div class="section-title"><span class="icon">💼</span>實習經驗</div>
+      <div class="section-title"><span class="icon">💼</span>工作經歷</div>
+
+      <div class="timeline-item">
+        <div class="tl-header">
+          <div class="tl-org">成鼎電工實業</div>
+          <div class="tl-date">2026/09 ～ 迄今</div>
+        </div>
+        <div class="tl-role">數位流程 AI 應用員（實習兼職）</div>
+        <div class="tl-sub">營運部 ・ 機電工程業</div>
+        <ul class="tl-bullets">
+          <li><strong>工程驗收管理系統（主責開發，已上線）</strong>：以 Google Apps Script、Google 試算表與 Drive 建置行動版工程驗收平台，串接「專案 → 協力商 → 工程項目 → 施工階段 → 逐項驗收 → 不合格改善／複驗 → 完工比例 → 請款進度」流程，共九個功能模組，工地人員以手機即可逐項填寫、拍照、簽名。</li>
+          <li><strong>主檔資料治理與權限控管</strong>：以統一編號去重，將協力商主檔 149 列整併為 127 家，支援依類型、工種、區域篩選；改為限公司網域登入，保留登入／登出稽核紀錄。</li>
+          <li><strong>效能與品質把關</strong>：日常開頁時間由 20–40 秒降至 6–9 秒；所有新增、修改、刪除走單一寫入路徑並以自動測試檢查，部署前比對雲端與本機內容一致才寫入；電腦、平板、手機三種版面逐頁驗證。</li>
+          <li><strong>部門日誌小幫手（全公司開放）</strong>：將單一用途的週報機器人改寫為跨部門自助工具（Google Apps Script × Gemini），各部門可自選 Google Chat 群組、期間與格式產生總結並排程發送；設計模型自動備援、執行時間上限與失敗通知。</li>
+          <li><strong>Google Chat 問答機器人（n8n × LLM）</strong>：同仁可直接查詢消防法規與內部維護工法；匯款等敏感資料改由程式精確查表、不經過 AI，並加入請求簽章驗證。</li>
+          <li><strong>Odoo 19 ERP 導入（三人導入小組）</strong>：負責教育訓練教材與系統整合評估，製作含 50 題測驗與 5 個操作模擬器的互動學習網頁，操作步驟逐一對照官方手冊驗證。</li>
+          <li><strong>推廣與治理</strong>：製作操作手冊、教育訓練簡報與 AI 工具安裝指南；建立公司 GitHub 組織集中管理自動化專案，金鑰與帳戶資料不納入版本庫。</li>
+        </ul>
+      </div>
 
       <div class="timeline-item">
         <div class="tl-header">
@@ -563,41 +590,9 @@
       </ul>
     </div>
 
-    <!-- 專案經歷 -->
+    <!-- 個人專案 -->
     <div class="section">
-      <div class="section-title"><span class="icon">🚀</span>專案經歷</div>
-
-      <!-- Antigravity -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-name">Antigravity — AI Agent 工作流平台</div>
-          <span class="project-tag">AI / Automation</span>
-        </div>
-        <div class="project-desc">整合多代理人系統與 RAG 知識庫的自動化工程平台，涵蓋全端網頁開發、AI 影音自動產出。</div>
-        <ul class="project-bullets">
-          <li><strong>多代理人調度</strong>：熟練操作與評測 Claude Code、OpenCode、GPT-CodeX、AntiGravity 2.0 等前沿 Agent，執行複雜任務分解與自動化流程。</li>
-          <li><strong>零門檻環境建置</strong>：設計基於 Markdown 的工作區配置懶人包，自動檢查 Node.js、Git、API 金鑰，實現開箱即用部署。</li>
-          <li><strong>RAG 知識庫整合</strong>：串接 Google NotebookLM、Obsidian 第二大腦、Google Drive 與 GitHub，打造會自動同步與成長的個人知識系統。</li>
-          <li><strong>全端資料持久化</strong>：透過 MCP 以自然語言操控 Supabase 與 Firebase，實現前後端無縫整合；另開發多人連線對戰遊戲、QR Code 產生器等互動式網頁工具。</li>
-          <li><strong>AI 影音全自動產出</strong>：整合 Hyperframes 等多個 AI Agent，實現腳本撰寫、畫面生成、配音到剪輯的完整自動化工作流。</li>
-          <li><strong>自動化資料工程</strong>：編寫 Python 腳本自動抓取影片字幕、擷取摘要並生成結構化知識庫索引（build_knowledge_base.py）。</li>
-          <li><strong>HTML5 動態簡報</strong>：以 HTML5 / CSS / JS 製作具備即時互動元件的高質感教學簡報系統，取代傳統 PPT。</li>
-        </ul>
-      </div>
-
-      <!-- Gemini Landing Page -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-name">房仲服務入口網 — 台灣房仲單頁式 Landing Page</div>
-          <span class="project-tag">Web / GAS</span>
-        </div>
-        <ul class="project-bullets">
-          <li><strong>響應式前端開發</strong>：打造包含頂部導覽列、Hero 首屏視覺、服務說明、精選物件展示與聯絡表單的完整單頁式網站，建立專業品牌形象。</li>
-          <li><strong>GAS 後端自動化 CRM</strong>：運用 Google Apps Script 的 <code>doGet</code>／<code>doPost</code> 函式進行部署與前後端資料傳輸，將聯絡表單即時寫入 Google 試算表，達成 CRM 名單自動化收集。</li>
-          <li><strong>社群行銷整合</strong>：整合 QR Code 導流機制並串接 Facebook 粉絲專頁，強化跨平台行銷曝光與使用者互動體驗。</li>
-          <li><strong>線上展示</strong>：<a href="https://script.google.com/macros/s/AKfycbz1YT5zxmQmrr5M_lt5cAD5JEZzRcuTjrQq9H-tQaMbkHNin9fRhSf8FMSGVsAs2YRw2A/exec" target="_blank" style="color:var(--accent);">script.google.com → 房仲入口網</a></li>
-        </ul>
-      </div>
+      <div class="section-title"><span class="icon">🚀</span>個人專案</div>
 
       <!-- 多人即時數學搶答遊戲 -->
       <div class="project-card">
@@ -638,18 +633,6 @@
           <li><strong>技術棧</strong>：Claude Code、Chrome 瀏覽器自動化、Firebase、排程任務管理。</li>
         </ul>
       </div>
-
-      <!-- YouTube 頻道知識庫 -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-name">YouTube 頻道知識庫自動建置系統</div>
-          <span class="project-tag">Python / Knowledge Mgmt</span>
-        </div>
-        <ul class="project-bullets">
-          <li><strong>自動化爬取與分類</strong>：自動抓取指定 YouTube 頻道影片字幕，建立 Obsidian 三層結構化知識庫；下載 36 支影片字幕，依主題分類（Claude 系列／AntiGravity 系列／OpenCode 系列）並自動生成索引。</li>
-          <li><strong>技術棧</strong>：Python、yt-dlp、Obsidian、知識管理架構設計。</li>
-        </ul>
-      </div>
     </div>
 
     <!-- 證照 -->
@@ -670,7 +653,7 @@
           <div class="cert-issuer">醫療資訊管理相關機構</div>
         </div>
 
-        <div class="cert-section-label">Google AI 系列</div>
+        <div class="cert-section-label">Google AI / 教育認證</div>
 
         <div class="cert-item">
           <div class="cert-name">Gemini 認證教師證書</div>
@@ -678,27 +661,17 @@
         </div>
 
         <div class="cert-item">
-          <div class="cert-name">Generative AI Explorer — Vertex AI</div>
+          <div class="cert-name">生成式 AI 系列課程認證（5 項）</div>
+          <div class="cert-issuer">Google ・ Vertex AI、LLM、Generative AI Studio、負責任的 AI 等</div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-name">Google 認證教育家 第一級</div>
           <div class="cert-issuer">Google</div>
         </div>
 
         <div class="cert-item">
-          <div class="cert-name">大型語言模型 (LLM) 課程認證</div>
-          <div class="cert-issuer">Google</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">生成式 AI 課程認證</div>
-          <div class="cert-issuer">Google</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">Generative AI Studio</div>
-          <div class="cert-issuer">Google</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">負責任的 AI 技術課程認證</div>
+          <div class="cert-name">Google 認證教育家 第二級</div>
           <div class="cert-issuer">Google</div>
         </div>
 
@@ -714,25 +687,6 @@
           <div class="cert-issuer">財團法人中華民國電腦技能基金會</div>
         </div>
 
-        <div class="cert-section-label">Google 教育認證</div>
-
-        <div class="cert-item">
-          <div class="cert-name">Google 認證教育家 第一級</div>
-          <div class="cert-issuer">Google</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">Google 認證教育家 第二級</div>
-          <div class="cert-issuer">Google</div>
-        </div>
-
-        <div class="cert-section-label">英語</div>
-
-        <div class="cert-item">
-          <div class="cert-name">TOEIC 多益測驗 — 680 分</div>
-          <div class="cert-issuer">ETS 美國教育測驗服務社</div>
-        </div>
-
         <div class="cert-section-label">產業培訓</div>
 
         <div class="cert-item">
@@ -741,18 +695,6 @@
         </div>
 
         <div class="cert-item" style="visibility:hidden;"></div>
-
-        <div class="cert-section-label">體育 / 其他</div>
-
-        <div class="cert-item">
-          <div class="cert-name">C 級籃球教練</div>
-          <div class="cert-issuer">中華民國籃球協會</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">籃球協會紀錄台講習認證</div>
-          <div class="cert-issuer">中華民國籃球協會</div>
-        </div>
 
       </div>
     </div>
