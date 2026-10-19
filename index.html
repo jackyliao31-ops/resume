@@ -8,716 +8,386 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --dark: #1a2636;
-      --accent: #2196f3;
-      --accent2: #00bcd4;
-      --light-bg: #f4f6f9;
-      --text: #2d3748;
-      --muted: #718096;
-      --border: #e2e8f0;
-      --tag-bg: #eaf4fe;
-      --tag-color: #1565c0;
+      --navy: #1f3350;
+      --bar: #d6e0ee;
+      --text: #222b38;
+      --muted: #5f6b7a;
+      --line: #c9d3e0;
+      --link: #1f5fa8;
     }
 
     body {
-      font-family: "Noto Sans TC", "Segoe UI", sans-serif;
-      background: var(--light-bg);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "Segoe UI", sans-serif;
+      background: #eef1f6;
       color: var(--text);
-      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 32px 40px 36px;
     }
 
     /* ── HEADER ── */
     .header {
-      background: linear-gradient(135deg, #0f1e30 0%, #1a3a5c 60%, #1565c0 100%);
-      color: #fff;
-      padding: 36px 48px 32px;
       display: flex;
       align-items: center;
-      gap: 36px;
+      gap: 24px;
+      padding-bottom: 18px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--navy);
     }
 
     .header-photo {
-      width: 120px;
-      height: 120px;
+      width: 96px;
+      height: 96px;
       border-radius: 50%;
-      border: 4px solid rgba(255,255,255,0.35);
-      object-fit: cover;
-      background: #2a4a6d;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      color: rgba(255,255,255,0.6);
       overflow: hidden;
+      flex-shrink: 0;
+      background: #d6e0ee;
     }
 
-    .header-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
+    .header-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .header-info h1 {
-      font-size: 2rem;
+      font-size: 1.9rem;
       font-weight: 700;
+      color: var(--navy);
       letter-spacing: 2px;
+      line-height: 1.2;
     }
 
     .header-info h1 span {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       font-weight: 400;
-      letter-spacing: 4px;
-      color: rgba(255,255,255,0.75);
-      margin-left: 12px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      margin-left: 10px;
     }
 
-    .header-info .title {
-      margin-top: 6px;
-      font-size: 1rem;
-      color: rgba(255,255,255,0.7);
-      letter-spacing: 1px;
-    }
-
-    .header-info .tagline {
-      margin-top: 10px;
+    .contact {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 22px;
       font-size: 0.85rem;
-      color: rgba(255,255,255,0.5);
-      font-style: italic;
+      color: var(--muted);
     }
 
-    /* ── MAIN LAYOUT ── */
-    .main {
+    /* ── TWO COLUMNS ── */
+    .columns {
       display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 0;
-      max-width: 1100px;
-      margin: 0 auto;
+      grid-template-columns: 5fr 7fr;
+      gap: 28px;
+      align-items: start;
     }
 
-    /* ── SIDEBAR ── */
-    .sidebar {
-      background: #fff;
-      padding: 28px 24px;
-      border-right: 1px solid var(--border);
-    }
-
-    /* ── CONTENT ── */
-    .content {
-      background: var(--light-bg);
-      padding: 28px 32px;
-    }
-
-    /* ── SECTION ── */
-    .section { margin-bottom: 28px; }
+    .section { margin-bottom: 22px; }
+    .section:last-child { margin-bottom: 0; }
 
     .section-title {
-      font-size: 0.78rem;
+      background: var(--bar);
+      color: var(--navy);
+      font-size: 1.1rem;
       font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      border-bottom: 2px solid var(--accent);
-      padding-bottom: 5px;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 7px;
+      letter-spacing: 4px;
+      padding: 5px 12px;
+      border-radius: 4px;
+      margin-bottom: 12px;
     }
 
-    .section-title .icon { font-size: 1rem; }
+    /* ── ENTRY ── */
+    .entry { margin-bottom: 14px; }
+    .entry:last-child { margin-bottom: 0; }
 
-    /* ── CONTACT ── */
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 9px;
-      font-size: 0.83rem;
-      color: var(--text);
-      word-break: break-all;
-    }
-
-    .contact-item .ci-icon {
-      width: 18px;
-      flex-shrink: 0;
-      color: var(--accent);
-      margin-top: 1px;
-    }
-
-    /* ── SKILL TAGS ── */
-    .tag-group { margin-bottom: 10px; }
-    .tag-group-label {
-      font-size: 0.72rem;
-      font-weight: 600;
+    .entry-date {
+      font-size: 0.82rem;
+      font-weight: 700;
       color: var(--muted);
-      margin-bottom: 5px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
-    .tags { display: flex; flex-wrap: wrap; gap: 5px; }
-
-    .tag {
-      background: var(--tag-bg);
-      color: var(--tag-color);
-      font-size: 0.72rem;
-      padding: 3px 9px;
-      border-radius: 20px;
-      font-weight: 500;
+    .entry-org {
+      font-size: 0.97rem;
+      font-weight: 700;
+      color: var(--navy);
     }
 
-    /* ── ABOUT ── */
-    .about-text {
+    .entry-role {
       font-size: 0.88rem;
-      line-height: 1.8;
+      font-weight: 700;
       color: var(--text);
     }
 
-    /* ── TIMELINE ── */
-    .timeline-item {
-      position: relative;
+    .entry-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .entry ul {
+      margin-top: 4px;
       padding-left: 18px;
-      padding-bottom: 20px;
-      border-left: 2px solid var(--border);
-      margin-bottom: 0;
     }
 
-    .timeline-item:last-child { border-left: 2px solid transparent; }
-
-    .timeline-item::before {
-      content: "";
-      width: 10px;
-      height: 10px;
-      background: var(--accent);
-      border-radius: 50%;
-      position: absolute;
-      left: -6px;
-      top: 4px;
-    }
-
-    .tl-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    .tl-org {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .tl-date {
-      font-size: 0.78rem;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    .tl-role {
-      font-size: 0.82rem;
-      color: var(--accent);
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    .tl-sub {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 1px;
-    }
-
-    .tl-bullets {
-      margin-top: 8px;
-      padding-left: 16px;
-    }
-
-    .tl-bullets li {
-      font-size: 0.83rem;
-      line-height: 1.7;
-      color: var(--text);
-      margin-bottom: 5px;
-    }
-
-    .tl-bullets li strong { color: var(--dark); }
-
-    /* ── PROJECTS ── */
-    .project-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 18px;
-      margin-bottom: 14px;
-    }
-
-    .project-card:last-child { margin-bottom: 0; }
-
-    .project-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .project-name {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--dark);
-    }
-
-    .project-tag {
-      font-size: 0.7rem;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      color: #fff;
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-
-    .project-desc {
-      margin-top: 8px;
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .project-bullets {
-      margin-top: 8px;
-      padding-left: 16px;
-    }
-
-    .project-bullets li {
-      font-size: 0.82rem;
+    .entry li {
+      font-size: 0.86rem;
       line-height: 1.65;
-      color: var(--text);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
-    /* ── CERT GRID ── */
-    .cert-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .entry li strong { color: var(--navy); }
 
-    .cert-item {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 12px;
-    }
+    .entry a { color: var(--link); }
 
-    .cert-item.highlight {
-      border-color: var(--accent);
-      background: var(--tag-bg);
-    }
+    /* ── SIMPLE LISTS ── */
+    .plain p, .about-text { font-size: 0.88rem; line-height: 1.75; }
 
-    .cert-name {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--dark);
-    }
+    .kv { margin-bottom: 9px; }
+    .kv-label { font-size: 0.86rem; font-weight: 700; color: var(--navy); }
+    .kv-value { font-size: 0.85rem; line-height: 1.6; }
 
-    .cert-issuer {
-      font-size: 0.7rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    /* ── PUBLICATIONS ── */
-    .pub-list {
-      list-style: disc;
-      padding-left: 18px;
-    }
-
-    .pub-list li {
-      font-size: 0.85rem;
-      line-height: 1.75;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .pub-title {
-      font-weight: 600;
-      color: var(--dark);
-    }
-
-    .cert-section-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: var(--accent2);
-      text-transform: uppercase;
-      margin: 12px 0 6px;
-      grid-column: 1 / -1;
-    }
+    .cert-group { margin-bottom: 10px; }
+    .cert-group:last-child { margin-bottom: 0; }
+    .cert-group-label { font-size: 0.86rem; font-weight: 700; color: var(--navy); }
+    .cert-group ul { padding-left: 18px; margin-top: 2px; }
+    .cert-group li { font-size: 0.84rem; line-height: 1.6; margin-bottom: 2px; }
+    .cert-group li small { color: var(--muted); font-size: 0.76rem; }
 
     /* ── RESP ── */
-    @media (max-width: 900px) {
-      .main { grid-template-columns: 240px 1fr; }
-    }
-
     @media (max-width: 768px) {
-      .header { flex-direction: column; align-items: center; text-align: center; padding: 24px 16px; gap: 18px; }
-      .header-photo { width: 90px; height: 90px; font-size: 32px; }
-      .header-info h1 { font-size: 1.5rem; }
-      .main { grid-template-columns: 1fr; max-width: 100%; }
-      .sidebar { border-right: none; border-bottom: 1px solid var(--border); padding: 20px 16px; }
-      .content { padding: 20px 16px; }
-      .cert-grid { grid-template-columns: 1fr; }
-      .tl-header { flex-direction: column; gap: 2px; }
-      .project-header { flex-direction: column; gap: 4px; }
-      .project-card { padding: 12px 14px; }
-      .tags { gap: 4px; }
-    }
-
-    @media (max-width: 480px) {
-      .header-info h1 { font-size: 1.2rem; letter-spacing: 1px; }
-      .header-info h1 span { display: block; margin-left: 0; margin-top: 4px; font-size: 0.85rem; }
-      .section-title { font-size: 0.72rem; }
-      .tl-org { font-size: 0.88rem; }
-      .project-name { font-size: 0.85rem; }
+      .page { padding: 20px 16px 28px; }
+      .header { flex-direction: column; text-align: center; gap: 12px; }
+      .header-info h1 span { display: block; margin: 4px 0 0; }
+      .contact { justify-content: center; }
+      .columns { grid-template-columns: 1fr; gap: 22px; }
     }
 
     @media print {
-      @page { size: A4; margin: 12mm 10mm; }
-      body { background: #fff; }
-      .main { max-width: 100%; }
-      .section-title, .tl-header, .tl-role, .tl-sub { break-after: avoid; }
-      .tl-header, .tl-bullets li, .project-card, .cert-grid, .pub-list li { break-inside: avoid; }
-      .cert-grid { grid-template-columns: 1fr 1fr; }
+      @page { size: A4; margin: 10mm; }
+      body { background: #fff; font-size: 12px; }
+      .page { max-width: 100%; padding: 0; }
+      .section-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .section-title, .entry-date, .entry-org, .entry-role { break-after: avoid; }
+      .entry li { break-inside: avoid; }
     }
   </style>
 </head>
 <body>
+<div class="page">
 
-<!-- HEADER -->
-<header class="header">
-  <div class="header-photo">
-    <img src="photo.jpg" alt="廖常智">
-  </div>
-  <div class="header-info">
-    <h1>廖常智 <span>LIAO CHANG CHIH</span></h1>
-  </div>
-</header>
-
-<!-- MAIN -->
-<div class="main">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-
-    <!-- 聯絡資訊 -->
-    <div class="section">
-      <div class="section-title"><span class="icon">📌</span>聯絡資訊</div>
-
-      <div class="contact-item">
-        <span class="ci-icon">📞</span>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-photo"><img src="photo.jpg" alt="廖常智"></div>
+    <div class="header-info">
+      <h1>廖常智 <span>LIAO CHANG CHIH</span></h1>
+      <div class="contact">
         <span>0928-135-236</span>
-      </div>
-      <div class="contact-item">
-        <span class="ci-icon">✉️</span>
         <span>jackyliao31@gmail.com</span>
-      </div>
-      <div class="contact-item">
-        <span class="ci-icon">📍</span>
         <span>台北市信義區</span>
       </div>
     </div>
+  </header>
 
-    <!-- 技能 -->
-    <div class="section">
-      <div class="section-title"><span class="icon">⚙️</span>技能</div>
+  <div class="columns">
 
-      <div class="tag-group">
-        <div class="tag-group-label">程式語言</div>
-        <div class="tags">
-          <span class="tag">Python</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">HTML5 / CSS</span>
-          <span class="tag">SQL</span>
-          <span class="tag">Google Apps Script</span>
+    <!-- LEFT -->
+    <div class="col-left">
+
+      <div class="section">
+        <div class="section-title">學歷背景</div>
+
+        <div class="entry">
+          <div class="entry-date">2025/09 ～ 2027/06（預）</div>
+          <div class="entry-org">國立臺北科技大學</div>
+          <div class="entry-role">技術及職業教育研究所 ｜ 碩士</div>
+          <div class="entry-sub">數位學習組，日間就讀中</div>
+        </div>
+
+        <div class="entry">
+          <div class="entry-date">2021/09 ～ 2025/06</div>
+          <div class="entry-org">國立臺北護理健康大學</div>
+          <div class="entry-role">資訊管理學系 ｜ 學士</div>
         </div>
       </div>
 
-      <div class="tag-group">
-        <div class="tag-group-label">AI / LLM</div>
-        <div class="tags">
-          <span class="tag">Claude Code</span>
-          <span class="tag">Codex</span>
-          <span class="tag">Gemini API</span>
-          <span class="tag">Ollama</span>
-          <span class="tag">NotebookLM</span>
-          <span class="tag">MCP</span>
-          <span class="tag">RAG</span>
-          <span class="tag">Prompt Engineering</span>
+      <div class="section">
+        <div class="section-title">證照與認證</div>
+
+        <div class="cert-group">
+          <div class="cert-group-label">專案／資訊管理</div>
+          <ul>
+            <li>C 級一般專案經理 <small>APMA 美國專案管理學會</small></li>
+            <li>醫學資訊管理師 <small>台灣醫學資訊學會</small></li>
+          </ul>
         </div>
-      </div>
 
-      <div class="tag-group">
-        <div class="tag-group-label">流程自動化 / 整合</div>
-        <div class="tags">
-          <span class="tag">n8n</span>
-          <span class="tag">Webhook</span>
-          <span class="tag">Google Chat API</span>
-          <span class="tag">OAuth</span>
-          <span class="tag">clasp</span>
+        <div class="cert-group">
+          <div class="cert-group-label">Google AI／教育認證</div>
+          <ul>
+            <li>Gemini 認證教師證書</li>
+            <li>生成式 AI 系列課程認證（5 項）<small>Vertex AI、LLM、Generative AI Studio、負責任的 AI 等</small></li>
+            <li>Google 認證教育家 第一級</li>
+            <li>Google 認證教育家 第二級</li>
+          </ul>
         </div>
-      </div>
 
-      <div class="tag-group">
-        <div class="tag-group-label">企業系統 / 資料庫</div>
-        <div class="tags">
-          <span class="tag">Odoo 19 ERP</span>
-          <span class="tag">Google Sheets</span>
-          <span class="tag">PostgreSQL</span>
-          <span class="tag">Firebase</span>
+        <div class="cert-group">
+          <div class="cert-group-label">TQC／EEC</div>
+          <ul>
+            <li>EEC-企業電子化助理規劃師</li>
+            <li>TQC-DK 電子商務概論</li>
+          </ul>
         </div>
-      </div>
 
-      <div class="tag-group">
-        <div class="tag-group-label">部署 / 協作</div>
-        <div class="tags">
-          <span class="tag">GitHub</span>
-          <span class="tag">Docker Compose</span>
-          <span class="tag">GCP</span>
-          <span class="tag">Google Workspace</span>
-        </div>
-      </div>
-
-      <div class="tag-group">
-        <div class="tag-group-label">辦公應用</div>
-        <div class="tags">
-          <span class="tag">Microsoft Office</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 語言能力 -->
-    <div class="section">
-      <div class="section-title"><span class="icon">🌐</span>語言能力</div>
-      <div style="font-size:0.83rem; color:var(--text);">
-        <div style="margin-bottom:5px;">中文 — 母語</div>
-        <div>英文 — TOEIC 680 分</div>
-      </div>
-    </div>
-
-  </aside>
-
-  <!-- CONTENT -->
-  <main class="content">
-
-    <!-- 個人簡介 -->
-    <div class="section">
-      <div class="section-title"><span class="icon">👤</span>個人簡介</div>
-      <p class="about-text">
-        國立臺北科技大學技術及職業教育研究所（數位學習組）碩士生，現任成鼎電工實業營運部數位流程 AI 應用員（實習兼職）。專長是把部門重複的彙整與追蹤工作，做成可排程、可交接、跨部門可用的自動化工具，並同步撰寫操作手冊、負責教育訓練。在職期間以 Claude Code 為主要開發工具，交付工程驗收管理系統、部門日誌總結工具與 Google Chat 問答機器人，並參與 Odoo 19 ERP 導入。研究聚焦生成式 AI 在教學與訓練的應用，現任教育部教學實踐研究計畫研究助理與研究所「數位學習理論」課程助教，與指導教授合著的期刊論文已於 2026 年 6 月發表。
-      </p>
-    </div>
-
-    <!-- 工作經歷 -->
-    <div class="section">
-      <div class="section-title"><span class="icon">💼</span>工作經歷</div>
-
-      <div class="timeline-item">
-        <div class="tl-header">
-          <div class="tl-org">成鼎電工實業</div>
-          <div class="tl-date">2026/09 ～ 迄今</div>
-        </div>
-        <div class="tl-role">數位流程 AI 應用員（實習兼職）</div>
-        <div class="tl-sub">營運部 ・ 機電工程業</div>
-        <ul class="tl-bullets">
-          <li><strong>工程驗收管理系統（主責開發，已上線）</strong>：以 Google Apps Script、Google 試算表與 Drive 建置行動版工程驗收平台，串接「專案 → 協力商 → 工程項目 → 施工階段 → 逐項驗收 → 不合格改善／複驗 → 完工比例 → 請款進度」流程，共九個功能模組，工地人員以手機即可逐項填寫、拍照、簽名。</li>
-          <li><strong>主檔資料治理與權限控管</strong>：以統一編號去重，將協力商主檔 149 列整併為 127 家，支援依類型、工種、區域篩選；改為限公司網域登入，保留登入／登出稽核紀錄。</li>
-          <li><strong>效能與品質把關</strong>：日常開頁時間由 20–40 秒降至 6–9 秒；所有新增、修改、刪除走單一寫入路徑並以自動測試檢查，部署前比對雲端與本機內容一致才寫入；電腦、平板、手機三種版面逐頁驗證。</li>
-          <li><strong>部門日誌小幫手（全公司開放）</strong>：將單一用途的週報機器人改寫為跨部門自助工具（Google Apps Script × Gemini），各部門可自選 Google Chat 群組、期間與格式產生總結並排程發送；設計模型自動備援、執行時間上限與失敗通知。</li>
-          <li><strong>Google Chat 問答機器人（n8n × LLM）</strong>：同仁可直接查詢消防法規與內部維護工法；匯款等敏感資料改由程式精確查表、不經過 AI，並加入請求簽章驗證。</li>
-          <li><strong>Odoo 19 ERP 導入（三人導入小組）</strong>：負責教育訓練教材與系統整合評估，製作含 50 題測驗與 5 個操作模擬器的互動學習網頁，操作步驟逐一對照官方手冊驗證。</li>
-          <li><strong>推廣與治理</strong>：製作操作手冊、教育訓練簡報與 AI 工具安裝指南；建立公司 GitHub 組織集中管理自動化專案，金鑰與帳戶資料不納入版本庫。</li>
-        </ul>
-      </div>
-
-      <div class="timeline-item">
-        <div class="tl-header">
-          <div class="tl-org">神通資訊科技股份有限公司（MiTAC Information Technology）</div>
-          <div class="tl-date">2025/04 ～ 2025/09</div>
-        </div>
-        <div class="tl-role">助理工程師（實習）</div>
-        <div class="tl-sub">台北市內湖區 ・ 電腦系統整合服務業（500人以上）</div>
-        <ul class="tl-bullets">
-          <li><strong>智慧櫃台 Prompt Engineering</strong>：負責生成式 AI 智慧服務台後台提示詞設計，優化 LLM 在客服問答與業務導引情境下的回應品質與一致性。</li>
-          <li><strong>多語言功能測試</strong>：執行日文、英文、越南文三語版本的功能驗證，確保跨語言對話正確性與邊界條件處理。</li>
-          <li><strong>測試流程文件記錄</strong>：彙整多語言功能測試結果，撰寫測試流程文件與問題回報紀錄，供後續版本迭代與品質追蹤使用。</li>
-          <li><strong>展覽布展</strong>：代表公司參與 <strong>AI WAVE 世界人工智慧視野展</strong> 及 <strong>Computex 2025</strong>，協助智慧櫃台展位布置與現場產品展示。</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- 學歷 -->
-    <div class="section">
-      <div class="section-title"><span class="icon">🎓</span>學歷</div>
-
-      <div class="timeline-item">
-        <div class="tl-header">
-          <div class="tl-org">國立臺北科技大學</div>
-          <div class="tl-date">2025/09 ～ 2027/06（預）</div>
-        </div>
-        <div class="tl-role">技術及職業教育研究所 ─ 碩士日間就讀中（數位學習組）</div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="tl-header">
-          <div class="tl-org">國立臺北護理健康大學</div>
-          <div class="tl-date">2021/09 ～ 2025/06</div>
-        </div>
-        <div class="tl-role">資訊管理學系 ─ 大學畢業</div>
-      </div>
-    </div>
-
-    <!-- 學術研究與發表 -->
-    <div class="section">
-      <div class="section-title"><span class="icon">📄</span>學術研究與發表</div>
-
-      <div class="cert-section-label">研究與教學助理</div>
-      <div>
-        <div class="timeline-item">
-          <div class="tl-header">
-            <div class="tl-org">國立臺北科技大學 技術及職業教育研究所</div>
-            <div class="tl-date">2026/08 ～ 2027/01（預）</div>
-          </div>
-          <div class="tl-role">計畫研究助理 ／ 研究所課程教學助理</div>
-          <div class="tl-sub">教育部 115 年度大專校院教學實踐研究計畫</div>
-          <ul class="tl-bullets">
-            <li><strong>計畫研究助理</strong>：參與「培育 AI 時代知識策展人之生成式 AI 與個人知識管理行動研究」，負責文獻整理、問卷與訪談資料蒐集，以及研究資料分析。</li>
-            <li><strong>課堂助教</strong>：擔任研究所「數位學習理論」課程教學助理，負責課程平台管理，並帶領學生進行課堂實作。</li>
+        <div class="cert-group">
+          <div class="cert-group-label">產業培訓</div>
+          <ul>
+            <li>設備元件機台基礎（32 小時）<small>TSMC ・ 2026/08</small></li>
           </ul>
         </div>
       </div>
 
-      <div class="cert-section-label">期刊論文</div>
-      <ul class="pub-list">
-        <li>
-          <span class="pub-title">「Vibe Coding 與師資培育中的互動模擬教材設計」</span>，
-          臺灣教育評論月刊，15，6，79-82，2026/06
-        </li>
-      </ul>
+      <div class="section">
+        <div class="section-title">技能專長</div>
+
+        <div class="kv">
+          <div class="kv-label">語言能力</div>
+          <div class="kv-value">中文：母語　英文：TOEIC 680 分</div>
+        </div>
+        <div class="kv">
+          <div class="kv-label">程式語言</div>
+          <div class="kv-value">Python、JavaScript、HTML5 / CSS、SQL、Google Apps Script</div>
+        </div>
+        <div class="kv">
+          <div class="kv-label">AI / LLM</div>
+          <div class="kv-value">Claude Code、Codex、Gemini API、Ollama、NotebookLM、MCP、RAG、Prompt Engineering</div>
+        </div>
+        <div class="kv">
+          <div class="kv-label">流程自動化／整合</div>
+          <div class="kv-value">n8n、Webhook、Google Chat API、OAuth、clasp</div>
+        </div>
+        <div class="kv">
+          <div class="kv-label">企業系統／資料庫</div>
+          <div class="kv-value">Odoo 19 ERP、Google Sheets、PostgreSQL、Firebase</div>
+        </div>
+        <div class="kv">
+          <div class="kv-label">部署／協作</div>
+          <div class="kv-value">GitHub、Docker Compose、GCP、Google Workspace</div>
+        </div>
+        <div class="kv">
+          <div class="kv-label">辦公應用</div>
+          <div class="kv-value">Microsoft Office</div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- 個人專案 -->
-    <div class="section">
-      <div class="section-title"><span class="icon">🚀</span>個人專案</div>
+    <!-- RIGHT -->
+    <div class="col-right">
 
-      <!-- 多人即時數學搶答遊戲 -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-name">多人即時數學搶答遊戲網頁</div>
-          <span class="project-tag">Firebase / Web</span>
-        </div>
-        <ul class="project-bullets">
-          <li><strong>獨立全端開發</strong>：設計具房間系統的即時多人對戰遊戲，以 Firebase Realtime Database 處理跨客戶端同步，已部署上線可多人同時連線。</li>
-          <li><strong>核心功能</strong>：建立／加入房間、即時搶答計分、三維排行榜（勝場／積分／場數）。</li>
-          <li><strong>技術棧</strong>：HTML / CSS / JavaScript、Firebase Auth & Realtime DB、GitHub Pages。</li>
-          <li><strong>線上展示</strong>：<a href="https://claude-test-fd4c1.web.app/" target="_blank" style="color:var(--accent);">claude-test-fd4c1.web.app</a></li>
-        </ul>
+      <div class="section">
+        <div class="section-title">個人簡介</div>
+        <p class="about-text">
+          國立臺北科技大學技術及職業教育研究所（數位學習組）碩士生，現任成鼎電工實業營運部數位流程 AI 應用員（實習兼職）。專長是把部門重複的彙整與追蹤工作，做成可排程、可交接、跨部門可用的自動化工具，並同步撰寫操作手冊、負責教育訓練。在職期間以 Claude Code 為主要開發工具，交付工程驗收管理系統、部門日誌總結工具與 Google Chat 問答機器人，並參與 Odoo 19 ERP 導入。研究聚焦生成式 AI 在教學與訓練的應用，現任教育部教學實踐研究計畫研究助理與研究所「數位學習理論」課程助教，與指導教授合著的期刊論文已於 2026 年 6 月發表。
+        </p>
       </div>
 
-      <!-- AI 影片製作自動化流水線 -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-name">AI 影片製作自動化流水線</div>
-          <span class="project-tag">Python / AI</span>
+      <div class="section">
+        <div class="section-title">工作經歷</div>
+
+        <div class="entry">
+          <div class="entry-date">2026/09 ～ 迄今</div>
+          <div class="entry-org">成鼎電工實業</div>
+          <div class="entry-role">數位流程 AI 應用員（實習兼職）</div>
+          <div class="entry-sub">營運部 ・ 機電工程業</div>
+          <ul>
+            <li><strong>工程驗收管理系統（主責開發，已上線）</strong>：以 Google Apps Script、Google 試算表與 Drive 建置行動版工程驗收平台，串接「專案 → 協力商 → 工程項目 → 施工階段 → 逐項驗收 → 不合格改善／複驗 → 完工比例 → 請款進度」流程，共九個功能模組，工地人員以手機即可逐項填寫、拍照、簽名。</li>
+            <li><strong>主檔資料治理與權限控管</strong>：以統一編號去重，將協力商主檔 149 列整併為 127 家，支援依類型、工種、區域篩選；改為限公司網域登入，保留登入／登出稽核紀錄。</li>
+            <li><strong>效能與品質把關</strong>：日常開頁時間由 20–40 秒降至 6–9 秒；所有新增、修改、刪除走單一寫入路徑並以自動測試檢查，部署前比對雲端與本機內容一致才寫入；電腦、平板、手機三種版面逐頁驗證。</li>
+            <li><strong>部門日誌小幫手（全公司開放）</strong>：將單一用途的週報機器人改寫為跨部門自助工具（Google Apps Script × Gemini），各部門可自選 Google Chat 群組、期間與格式產生總結並排程發送；設計模型自動備援、執行時間上限與失敗通知。</li>
+            <li><strong>Google Chat 問答機器人（n8n × LLM）</strong>：同仁可直接查詢消防法規與內部維護工法；匯款等敏感資料改由程式精確查表、不經過 AI，並加入請求簽章驗證。</li>
+            <li><strong>Odoo 19 ERP 導入（三人導入小組）</strong>：負責教育訓練教材與系統整合評估，製作含 50 題測驗與 5 個操作模擬器的互動學習網頁，操作步驟逐一對照官方手冊驗證。</li>
+            <li><strong>推廣與治理</strong>：製作操作手冊、教育訓練簡報與 AI 工具安裝指南；建立公司 GitHub 組織集中管理自動化專案，金鑰與帳戶資料不納入版本庫。</li>
+          </ul>
         </div>
-        <ul class="project-bullets">
-          <li><strong>完整後製自動化</strong>：建立從原始錄製到 YouTube 上架的全流程自動化系統，實際應用於幼兒園教保課程設計系列教學影片製作。</li>
-          <li><strong>技術整合</strong>：auto-editor 智慧剪輯（自動去除靜音段落）、Groq Whisper 語音轉字幕、Claude AI 字幕精修、edge-TTS 旁白生成、YouTube 標題自動產出。</li>
-          <li><strong>技術棧</strong>：Python、FFmpeg、auto-editor、Groq API、Claude API。</li>
-        </ul>
+
+        <div class="entry">
+          <div class="entry-date">2025/04 ～ 2025/09</div>
+          <div class="entry-org">神通資訊科技股份有限公司（MiTAC Information Technology）</div>
+          <div class="entry-role">助理工程師（實習）</div>
+          <div class="entry-sub">台北市內湖區 ・ 電腦系統整合服務業（500人以上）</div>
+          <ul>
+            <li><strong>智慧櫃台 Prompt Engineering</strong>：負責生成式 AI 智慧服務台後台提示詞設計，優化 LLM 在客服問答與業務導引情境下的回應品質與一致性。</li>
+            <li><strong>多語言功能測試</strong>：執行日文、英文、越南文三語版本的功能驗證，確保跨語言對話正確性與邊界條件處理。</li>
+            <li><strong>測試流程文件記錄</strong>：彙整多語言功能測試結果，撰寫測試流程文件與問題回報紀錄，供後續版本迭代與品質追蹤使用。</li>
+            <li><strong>展覽布展</strong>：代表公司參與 <strong>AI WAVE 世界人工智慧視野展</strong> 及 <strong>Computex 2025</strong>，協助智慧櫃台展位布置與現場產品展示。</li>
+          </ul>
+        </div>
       </div>
 
-      <!-- NotebookLM 深度研究自動化 -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-name">NotebookLM 深度研究自動化系統</div>
-          <span class="project-tag">Claude Code / Automation</span>
+      <div class="section">
+        <div class="section-title">學術研究與發表</div>
+
+        <div class="entry">
+          <div class="entry-date">2026/08 ～ 2027/01（預）</div>
+          <div class="entry-org">國立臺北科技大學 技術及職業教育研究所</div>
+          <div class="entry-role">計畫研究助理 ／ 研究所課程教學助理</div>
+          <div class="entry-sub">教育部 115 年度大專校院教學實踐研究計畫</div>
+          <ul>
+            <li><strong>計畫研究助理</strong>：參與「培育 AI 時代知識策展人之生成式 AI 與個人知識管理行動研究」，負責文獻整理、問卷與訪談資料蒐集，以及研究資料分析。</li>
+            <li><strong>課堂助教</strong>：擔任研究所「數位學習理論」課程教學助理，負責課程平台管理，並帶領學生進行課堂實作。</li>
+          </ul>
         </div>
-        <ul class="project-bullets">
-          <li><strong>全流程自動化</strong>：以 Claude Code Agent 自動化 NotebookLM Deep Research 完整流程，排程執行：自動啟動研究 → 等待完成（5 階段）→ 匯入 44+ 筆資料來源 → 輸出 Word / PPTX 文件。</li>
-          <li><strong>穩定運行</strong>：已累積 20+ 次定期執行，驗證系統可靠性。</li>
-          <li><strong>技術棧</strong>：Claude Code、Chrome 瀏覽器自動化、Firebase、排程任務管理。</li>
-        </ul>
+
+        <div class="entry">
+          <div class="entry-date">2026/06</div>
+          <div class="entry-org">期刊論文</div>
+          <ul>
+            <li><strong>「Vibe Coding 與師資培育中的互動模擬教材設計」</strong>，臺灣教育評論月刊，15，6，79-82</li>
+          </ul>
+        </div>
       </div>
+
+      <div class="section">
+        <div class="section-title">個人專案</div>
+
+        <div class="entry">
+          <div class="entry-org">多人即時數學搶答遊戲網頁</div>
+          <div class="entry-sub">Firebase / Web</div>
+          <ul>
+            <li><strong>獨立全端開發</strong>：設計具房間系統的即時多人對戰遊戲，以 Firebase Realtime Database 處理跨客戶端同步，已部署上線可多人同時連線。</li>
+            <li><strong>核心功能</strong>：建立／加入房間、即時搶答計分、三維排行榜（勝場／積分／場數）。</li>
+            <li><strong>技術棧</strong>：HTML / CSS / JavaScript、Firebase Auth & Realtime DB、GitHub Pages。</li>
+            <li><strong>線上展示</strong>：<a href="https://claude-test-fd4c1.web.app/" target="_blank">claude-test-fd4c1.web.app</a></li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry-org">AI 影片製作自動化流水線</div>
+          <div class="entry-sub">Python / AI</div>
+          <ul>
+            <li><strong>完整後製自動化</strong>：建立從原始錄製到 YouTube 上架的全流程自動化系統，實際應用於幼兒園教保課程設計系列教學影片製作。</li>
+            <li><strong>技術整合</strong>：auto-editor 智慧剪輯（自動去除靜音段落）、Groq Whisper 語音轉字幕、Claude AI 字幕精修、edge-TTS 旁白生成、YouTube 標題自動產出。</li>
+            <li><strong>技術棧</strong>：Python、FFmpeg、auto-editor、Groq API、Claude API。</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry-org">NotebookLM 深度研究自動化系統</div>
+          <div class="entry-sub">Claude Code / Automation</div>
+          <ul>
+            <li><strong>全流程自動化</strong>：以 Claude Code Agent 自動化 NotebookLM Deep Research 完整流程，排程執行：自動啟動研究 → 等待完成（5 階段）→ 匯入 44+ 筆資料來源 → 輸出 Word / PPTX 文件。</li>
+            <li><strong>穩定運行</strong>：已累積 20+ 次定期執行，驗證系統可靠性。</li>
+            <li><strong>技術棧</strong>：Claude Code、Chrome 瀏覽器自動化、Firebase、排程任務管理。</li>
+          </ul>
+        </div>
+      </div>
+
     </div>
+  </div>
 
-    <!-- 證照 -->
-    <div class="section">
-      <div class="section-title"><span class="icon">📜</span>證照與認證</div>
-
-      <div class="cert-grid">
-
-        <div class="cert-section-label">專案 / 資訊管理</div>
-
-        <div class="cert-item">
-          <div class="cert-name">C 級一般專案經理</div>
-          <div class="cert-issuer">APMA 美國專案管理學會</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">醫學資訊管理師</div>
-          <div class="cert-issuer">台灣醫學資訊學會</div>
-        </div>
-
-        <div class="cert-section-label">Google AI / 教育認證</div>
-
-        <div class="cert-item">
-          <div class="cert-name">Gemini 認證教師證書</div>
-          <div class="cert-issuer">Google</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">生成式 AI 系列課程認證（5 項）</div>
-          <div class="cert-issuer">Google ・ Vertex AI、LLM、Generative AI Studio、負責任的 AI 等</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">Google 認證教育家 第一級</div>
-          <div class="cert-issuer">Google</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">Google 認證教育家 第二級</div>
-          <div class="cert-issuer">Google</div>
-        </div>
-
-        <div class="cert-section-label">TQC / EEC</div>
-
-        <div class="cert-item">
-          <div class="cert-name">EEC-企業電子化助理規劃師</div>
-          <div class="cert-issuer">財團法人中華民國電腦技能基金會</div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name">TQC-DK 電子商務概論</div>
-          <div class="cert-issuer">財團法人中華民國電腦技能基金會</div>
-        </div>
-
-        <div class="cert-section-label">產業培訓</div>
-
-        <div class="cert-item">
-          <div class="cert-name">設備元件機台基礎（32 小時）</div>
-          <div class="cert-issuer">台灣積體電路製造股份有限公司（TSMC）・ 2026/08</div>
-        </div>
-
-        <div class="cert-item" style="visibility:hidden;"></div>
-
-      </div>
-    </div>
-
-  </main>
 </div>
-
 </body>
 </html>
