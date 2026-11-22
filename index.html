@@ -185,6 +185,8 @@
       .section-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .section-title, .entry-date, .entry-org, .entry-role { break-after: avoid; }
       .entry li { break-inside: avoid; }
+      .entry a { color: var(--text); text-decoration: none; }
+      .entry a::after { content: "：" attr(href); color: var(--muted); }
     }
   </style>
 </head>
@@ -356,6 +358,21 @@
           <div class="entry-org">期刊論文</div>
           <ul>
             <li><strong>「Vibe Coding 與師資培育中的互動模擬教材設計」</strong>，臺灣教育評論月刊，15，6，79-82</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">個人作品</div>
+
+        <div class="entry">
+          <div class="entry-date">2026/11</div>
+          <div class="entry-org">常智：課堂 AI 語音助教</div>
+          <div class="entry-sub">個人專案 ・ <a href="https://jackyliao31-ops.github.io/resume/changchih/">產品介紹頁</a></div>
+          <ul>
+            <li>老師用說的就能翻投影片、出題給全班、在黑板上推導、操作電腦；學生掃 QR code 免登入作答，結果即時畫成圖表。</li>
+            <li>以 OpenAI Realtime 處理即時語音與 function calling，用 FastAPI 串接 40 項工具，包含 Office COM、Windows UI Automation、R 統計與 Firebase。</li>
+            <li>刪檔、送出等高風險動作須口頭確認，並擋下密碼與個資輸入；62 項自動測試全數通過。</li>
           </ul>
         </div>
       </div>
