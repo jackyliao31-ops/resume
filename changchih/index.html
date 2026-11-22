@@ -299,6 +299,8 @@ nav.top .inner { display: flex; align-items: center; gap: 20px; height: 60px; }
 .end .cta { justify-content: center; }
 footer { border-top: 1px solid var(--line); padding-block: 28px; color: var(--muted); font-size: .85rem; }
 footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+footer .credit { display: grid; gap: 4px; justify-content: start; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+footer .credit a { overflow-wrap: anywhere; }
 
 /* 手機：規格表改為上下排列；比較表第一欄固定 */
 @media (max-width: 620px) {
@@ -578,7 +580,13 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
   </div>
 </section>
 
-<footer><div class="inner"><span>常智 課堂 AI 語音助教 · 原型版本</span><span>由廖常智設計與建置</span></div></footer>
+<footer>
+  <div class="inner"><span>常智 課堂 AI 語音助教 · 原型版本</span><span>由廖常智設計與建置</span></div>
+  <div class="inner credit">
+    <p>本作品參考陳奕安博士。</p>
+    <p>任何問題請 email：<a href="mailto:jackyliao31@gmail.com">jackyliao31@gmail.com</a></p>
+  </div>
+</footer>
 </div>
 
 <script>
