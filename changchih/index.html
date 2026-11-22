@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="常智：課堂 AI 語音助教。老師用說的操作投影、出題、統計、推導與電腦，學生掃碼免登入作答。">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>常智課堂助教</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Sora:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: 產品發表頁。全寬色帶分段、內容置於 1120px 置中欄；刻意只做深色一種外觀，呼應常智投影畫面 */
+:root {
+  --bg: #07121a;
+  --band: #0c1b25;
+  --surface: #11242f;
+  --surface-2: #163040;
+  --ink: #e6f1f5;
+  --muted: #8fa7b3;
+  --line: #21394a;
+  --cyan: #3fd0e6;     /* 常智圓環：待命、聆聽 */
+  --pink: #f47aa6;     /* 常智說話中 */
+  --lime: #8be29a;     /* 正確答案 */
+  --amber: #f2b84b;    /* 需要確認 */
+  --red: #ff7b7b;      /* 拒絕 */
+  --font-display: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  --font-latin: "Sora", "Noto Sans TC", sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-display); font-size: 16px; line-height: 1.7; }
+h1, h2, h3, h4 { margin: 0; line-height: 1.25; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--cyan); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+code { font-family: var(--font-mono); font-size: .85em; background: var(--surface-2); padding: .1em .4em; border-radius: 4px; }
+
+.inner { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.band { padding-block: 88px; }
+.band.alt { background: var(--band); }
+.kicker { font-family: var(--font-latin); font-size: .78rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--cyan); }
+.h2 { font-size: clamp(1.9rem, 4.4vw, 3rem); font-weight: 900; margin-top: 12px; }
+.sub { color: var(--muted); font-size: 1.08rem; max-width: 40em; margin-top: 14px; }
+.head { margin-bottom: 40px; }
+
+/* 受眾切換：一般／技術 */
+[data-aud="plain"] .t-only { display: none !important; }
+[data-aud="tech"] .p-only { display: none !important; }
+
+/* 導覽列 */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: rgba(7,18,26,.92); }
+nav.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(7,18,26,.86); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+nav.top .inner { display: flex; align-items: center; gap: 20px; height: 60px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 1.15rem; letter-spacing: .08em; text-decoration: none; color: var(--ink); }
+.logo i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--cyan); box-shadow: 0 0 12px var(--cyan), inset 0 0 8px var(--cyan); }
+.links { display: flex; gap: 22px; margin-left: auto; font-size: .92rem; }
+.links a { color: var(--muted); text-decoration: none; }
+.links a:hover { color: var(--ink); }
+.aud { display: flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px; flex: none; }
+.aud button { border: 0; background: none; padding: 5px 14px; border-radius: 999px; font-size: .85rem; color: var(--muted); cursor: pointer; }
+.aud button[aria-pressed="true"] { background: var(--cyan); color: var(--bg); font-weight: 700; }
+@media (max-width: 860px) {
+  nav.top .inner { flex-wrap: wrap; height: auto; padding-block: 8px 0; row-gap: 4px; }
+  .aud { margin-left: auto; }
+  .links { order: 3; width: 100%; margin: 0; gap: 4px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .links::-webkit-scrollbar { display: none; }
+  .links a { flex: none; padding: 10px 12px; white-space: nowrap; }
+}
+
+/* Hero */
+.hero { position: relative; overflow: hidden; margin-top: calc(-1 * env(safe-area-inset-top, 0px)); padding-top: calc(env(safe-area-inset-top, 0px) + 72px); padding-bottom: 72px;
+  background: radial-gradient(60% 70% at 72% 40%, rgba(63,208,230,.16), transparent 70%), radial-gradient(40% 50% at 90% 80%, rgba(244,122,166,.12), transparent 70%), var(--bg); }
+.hero .inner { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
+.hero .inner > * { min-width: 0; }
+.hero h1 { font-size: clamp(2.6rem, 7vw, 4.8rem); font-weight: 900; letter-spacing: .02em; margin-top: 16px; }
+.hero h1 span { background: linear-gradient(90deg, var(--cyan), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .sub { font-size: 1.18rem; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 999px; font-weight: 700; text-decoration: none; border: 1px solid var(--line); cursor: pointer; background: var(--surface); color: var(--ink); }
+.btn.primary { background: var(--cyan); color: var(--bg); border-color: var(--cyan); }
+.btn:hover { filter: brightness(1.1); }
+.orb { position: relative; aspect-ratio: 1; max-width: 460px; width: 100%; margin: 0 auto; }
+.orb canvas { width: 100%; height: 100%; display: block; }
+.orb .label { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; pointer-events: none; }
+.orb .label b { display: block; font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; letter-spacing: .2em; }
+.orb .label small { color: var(--muted); font-size: .9rem; letter-spacing: .1em; }
+.try { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 18px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 14px; font-size: .88rem; cursor: pointer; }
+.chip:hover, .chip[aria-pressed="true"] { border-color: var(--cyan); color: var(--cyan); }
+.say-line { text-align: center; min-height: 3.4em; margin-top: 14px; color: var(--muted); font-size: .95rem; }
+.say-line b { color: var(--pink); font-weight: 500; }
+
+/* 數據帶 */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stats div { padding: 28px 20px; border-right: 1px solid var(--line); }
+.stats div:last-child { border-right: 0; }
+.stats b { display: block; font-family: var(--font-latin); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink); line-height: 1.1; }
+.stats span { color: var(--muted); font-size: .9rem; }
+@media (max-width: 760px) { .stats { grid-template-columns: repeat(2, 1fr); } .stats div:nth-child(2) { border-right: 0; } .stats div:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
+
+/* 互動體驗 */
+.demo { display: grid; grid-template-columns: 280px 1fr; gap: 24px; }
+.demo > * { min-width: 0; }
+.cmds { display: grid; gap: 8px; align-content: start; }
+.cmd { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; cursor: pointer; display: grid; gap: 2px; }
+.cmd small { color: var(--muted); font-size: .78rem; letter-spacing: .06em; }
+.cmd span { font-weight: 500; }
+.cmd[aria-pressed="true"] { border-color: var(--cyan); background: var(--surface-2); box-shadow: 0 0 0 1px var(--cyan) inset; }
+.screen { background: #050d13; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; min-height: 460px; }
+.screen-bar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--line); font-size: .8rem; color: var(--muted); }
+.screen-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.screen-bar .tag { margin-left: auto; border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; }
+.stagearea { position: relative; padding: 24px; display: grid; place-items: center; min-height: 320px; }
+.dialog { border-top: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 8px; font-size: .92rem; }
+.bub { display: flex; gap: 10px; align-items: baseline; }
+.bub em { font-style: normal; flex: none; font-size: .72rem; letter-spacing: .08em; padding: 1px 8px; border-radius: 999px; border: 1px solid currentColor; }
+.bub.t em { color: var(--muted); }
+.bub.a em { color: var(--pink); }
+.typing::after { content: "▍"; color: var(--pink); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.note { font-size: .78rem; color: var(--muted); margin-top: 10px; }
+@media (max-width: 1024px) { .demo { grid-template-columns: 230px 1fr; } }
+@media (max-width: 860px) {
+  .demo { grid-template-columns: 1fr; gap: 14px; }
+  /* 手機：指令改成一列可橫向滑動，畫面維持在視線內 */
+  .cmds { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 6px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+  .cmd { flex: none; scroll-snap-align: start; padding: 10px 14px; }
+  .screen { min-height: 0; }
+  .stagearea { min-height: 280px; padding: 16px; }
+}
+@media (max-width: 620px) {
+  .vote .bar { grid-template-columns: 1fr 2.4em; gap: 4px 10px; }
+  .vote .bar > span:first-child { grid-column: 1 / -1; }
+  .board { padding: 14px; border-width: 4px; }
+  .step .eq { font-size: 1rem; overflow-wrap: anywhere; }
+}
+
+/* 場景：文字雲 */
+.cloud { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 18px; max-width: 560px; }
+.cloud span { font-weight: 900; animation: pop .5s backwards; }
+@keyframes pop { from { transform: scale(.4); opacity: 0; } }
+/* 場景：投票 */
+.vote { display: grid; grid-template-columns: 1fr 200px; gap: 24px; width: 100%; align-items: center; }
+.vote > * { min-width: 0; }
+.q { font-weight: 700; margin-bottom: 14px; font-size: 1.05rem; }
+.bar { display: grid; grid-template-columns: 7.5em 1fr 2.4em; gap: 10px; align-items: center; margin-bottom: 10px; font-size: .9rem; }
+.track { height: 22px; background: var(--surface); border-radius: 6px; overflow: hidden; }
+.fill { height: 100%; background: var(--cyan); border-radius: 6px; transition: width .5s ease; }
+.bar.ok .fill { background: var(--lime); }
+.bar .n { font-family: var(--font-latin); font-variant-numeric: tabular-nums; text-align: right; }
+.phone { border: 2px solid var(--line); border-radius: 26px; padding: 18px 12px; background: var(--bg); display: grid; gap: 8px; }
+.phone .ttl { text-align: center; font-size: .78rem; color: var(--muted); }
+.phone p { font-size: .85rem; font-weight: 700; }
+.phone button { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px; font-size: .85rem; cursor: pointer; text-align: left; }
+.phone button:hover:not(:disabled) { border-color: var(--cyan); }
+.phone button:disabled { opacity: .55; cursor: default; }
+.phone .done { text-align: center; color: var(--lime); font-size: .82rem; }
+@media (max-width: 620px) { .vote { grid-template-columns: 1fr; } .phone { max-width: 240px; margin: 0 auto; } }
+/* 場景：黑板 */
+.board { width: 100%; max-width: 620px; background: #16302a; border: 6px solid #3b2f22; border-radius: 10px; padding: 20px 22px; font-family: "Cambria Math", "Times New Roman", serif; color: #eaf3ea; display: grid; gap: 10px; }
+.board h4 { font-family: var(--font-display); font-size: .95rem; color: #bfe3c6; }
+.step { display: grid; grid-template-columns: 2em 1fr; gap: 8px; animation: pop .4s backwards; }
+.step .eq { font-size: 1.15rem; }
+.step small { grid-column: 2; font-family: var(--font-display); font-size: .82rem; color: #bfe3c6; }
+.board .ctl { display: flex; gap: 8px; margin-top: 6px; font-family: var(--font-display); }
+.board button { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); border-radius: 8px; padding: 4px 12px; cursor: pointer; font-size: .85rem; }
+/* 場景：3D */
+.cell { display: grid; grid-template-columns: 260px 1fr; gap: 24px; align-items: center; width: 100%; }
+.cell > * { min-width: 0; }
+.cell svg { width: 100%; max-width: 260px; }
+.spin { transform-origin: 130px 130px; animation: spin 24s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.org { cursor: pointer; transition: opacity .3s; }
+.cell.focus .org:not(.on) { opacity: .25; }
+.parts { display: grid; gap: 6px; }
+.parts button { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; cursor: pointer; font-size: .88rem; }
+.parts button[aria-pressed="true"] { border-color: var(--pink); color: var(--pink); }
+.parts p { color: var(--muted); font-size: .88rem; min-height: 3em; }
+@media (max-width: 620px) { .cell { grid-template-columns: 1fr; justify-items: center; } }
+/* 場景：Word */
+.word { width: 100%; max-width: 620px; background: #f4f6f8; color: #1b2733; border-radius: 8px; overflow: hidden; font-size: .85rem; }
+.word .rb { display: flex; gap: 2px; background: #1f5fae; color: #fff; padding: 6px 8px 0; flex-wrap: wrap; }
+.word .rb span { padding: 4px 12px; border-radius: 6px 6px 0 0; }
+.word .rb span.on { background: #f4f6f8; color: #1f5fae; font-weight: 700; box-shadow: 0 0 0 2px var(--pink); }
+.word .tools { display: flex; gap: 6px; padding: 8px; border-bottom: 1px solid #d5dbe1; flex-wrap: wrap; min-height: 42px; }
+.word .tools i { font-style: normal; background: #fff; border: 1px solid #d5dbe1; border-radius: 4px; padding: 2px 10px; }
+.word .page { padding: 18px 22px; min-height: 150px; display: grid; gap: 8px; }
+.word .ans { color: #c62828; }
+/* 場景：地圖 */
+.map { width: 100%; max-width: 620px; }
+.map svg { width: 100%; height: auto; display: block; border-radius: 10px; }
+.route { stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 2.2s ease forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* 特色 */
+.feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.feat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: grid; gap: 10px; align-content: start; min-width: 0; transition: transform .25s, border-color .25s; }
+.feat:hover { transform: translateY(-4px); border-color: var(--cyan); }
+.feat .ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--surface-2); color: var(--cyan); }
+.feat h3 { font-size: 1.12rem; }
+.feat p { color: var(--muted); font-size: .93rem; }
+.feat .t-only { font-size: .85rem; color: var(--ink); border-top: 1px dashed var(--line); padding-top: 10px; }
+@media (max-width: 900px) { .feats { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) {
+  .feats { grid-template-columns: 1fr; gap: 10px; }
+  /* 手機：圖示與標題同一列，卡片更緊湊 */
+  .feat { grid-template-columns: 40px 1fr; column-gap: 14px; row-gap: 6px; padding: 18px; }
+  .feat .ic { grid-row: span 2; }
+  .feat > p { grid-column: 2; }
+  .feat:hover { transform: none; }
+}
+
+/* 安全模擬 */
+.safe { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.safe > * { min-width: 0; }
+.rules { display: grid; gap: 12px; }
+.rule { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.rule .pill { font-size: .72rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.pill.amber { color: var(--amber); } .pill.red { color: var(--red); } .pill.cyan { color: var(--cyan); }
+.rule p { color: var(--muted); font-size: .92rem; }
+.rule h4 { font-size: 1rem; margin-bottom: 4px; }
+.sim { background: #050d13; border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 14px; align-content: start; }
+.sim .try { justify-content: flex-start; margin: 0; }
+.log { display: grid; gap: 8px; min-height: 210px; align-content: start; font-size: .92rem; }
+.log .bub { animation: pop .3s backwards; }
+.log .bub.a.warn em { color: var(--amber); }
+.log .bub.a.no em { color: var(--red); }
+.log .acts { display: flex; gap: 8px; padding-left: 3.6em; }
+.log .acts button { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 4px 14px; cursor: pointer; font-size: .85rem; }
+.log .acts button.yes { border-color: var(--amber); color: var(--amber); }
+@media (max-width: 860px) { .safe { grid-template-columns: 1fr; } }
+
+/* 架構 */
+.arch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.zone { border: 1px dashed var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 10px; align-content: start; }
+.zone h4 { font-size: .8rem; letter-spacing: .16em; color: var(--muted); font-family: var(--font-latin); font-weight: 600; }
+.zone h4 b { color: var(--ink); font-family: var(--font-display); letter-spacing: .05em; margin-left: 6px; }
+.node { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; cursor: pointer; display: grid; gap: 2px; transition: border-color .25s, box-shadow .25s; }
+.node small { color: var(--muted); font-size: .78rem; font-family: var(--font-mono); }
+.node[aria-pressed="true"] { border-color: var(--cyan); }
+.node.lit { border-color: var(--pink); box-shadow: 0 0 0 1px var(--pink), 0 0 22px rgba(244,122,166,.35); }
+.detail { margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; display: grid; gap: 8px; }
+.detail h4 { font-size: 1.1rem; }
+.detail p { color: var(--muted); }
+.journey { margin-top: 28px; display: grid; gap: 14px; }
+.journey-top { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.journey ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; counter-reset: j; }
+.journey li { counter-increment: j; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: .88rem; color: var(--muted); transition: border-color .25s, color .25s; }
+.journey li::before { content: counter(j); display: block; font-family: var(--font-latin); font-weight: 800; font-size: 1.3rem; color: var(--line); }
+.journey li.on { border-color: var(--pink); color: var(--ink); }
+.journey li.on::before { color: var(--pink); }
+@media (max-width: 860px) {
+  .arch { grid-template-columns: 1fr; gap: 12px; }
+  .zone { grid-template-columns: repeat(2, 1fr); }
+  .zone h4 { grid-column: 1 / -1; }
+  .journey ol { grid-template-columns: 1fr; gap: 6px; }
+  .journey li { display: grid; grid-template-columns: 1.6em 1fr; align-items: baseline; padding: 10px 12px; }
+  .journey li::before { font-size: 1.05rem; }
+  /* 「播放」時讓明細固定在視線內 */
+  .detail { position: sticky; bottom: max(12px, env(safe-area-inset-bottom, 0px)); z-index: 2; box-shadow: 0 -8px 24px rgba(0,0,0,.4); }
+}
+@media (max-width: 380px) { .zone { grid-template-columns: 1fr; } }
+
+/* 規格表 */
+.spec-wrap { overflow-x: auto; border-top: 1px solid var(--line); }
+.spec { width: 100%; border-collapse: collapse; min-width: 560px; }
+.spec th, .spec td { text-align: left; padding: 18px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.spec th { width: 22%; color: var(--muted); font-weight: 500; font-size: .92rem; }
+.spec td { font-size: .96rem; }
+.spec td code { white-space: nowrap; }
+
+/* 比較 */
+.cmp-wrap { overflow-x: auto; }
+.cmp { width: 100%; border-collapse: collapse; min-width: 640px; text-align: center; }
+.cmp th, .cmp td { padding: 14px 10px; border-bottom: 1px solid var(--line); }
+.cmp th:first-child, .cmp td:first-child { text-align: left; color: var(--muted); }
+.cmp thead th { font-size: .9rem; color: var(--muted); font-weight: 500; }
+.cmp thead th.us { color: var(--cyan); font-weight: 900; font-size: 1rem; }
+.cmp td.us { background: rgba(63,208,230,.06); }
+.y { color: var(--lime); font-weight: 700; } .n { color: var(--muted); } .m { color: var(--amber); }
+
+/* FAQ */
+.faq { display: grid; gap: 10px; max-width: 860px; }
+.faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 20px; }
+.faq summary { cursor: pointer; padding: 14px 0; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; color: var(--cyan); font-family: var(--font-latin); font-size: 1.3rem; line-height: 1; }
+.faq details[open] summary::after { content: "−"; }
+.faq details p { color: var(--muted); padding-bottom: 16px; }
+
+/* 結尾 */
+.end { text-align: center; padding-block: 96px; background: radial-gradient(50% 80% at 50% 100%, rgba(63,208,230,.14), transparent 70%), var(--bg); }
+.end .h2 { margin-inline: auto; }
+.end .sub { margin-inline: auto; }
+.end .cta { justify-content: center; }
+footer { border-top: 1px solid var(--line); padding-block: 28px; color: var(--muted); font-size: .85rem; }
+footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+/* 手機：規格表改為上下排列；比較表第一欄固定 */
+@media (max-width: 620px) {
+  .spec { min-width: 0; }
+  .spec tr { display: grid; padding-block: 14px; border-bottom: 1px solid var(--line); gap: 4px; }
+  .spec th, .spec td { display: block; width: auto; padding: 0; border: 0; }
+  .spec th { font-size: .82rem; letter-spacing: .06em; }
+  .spec td code { white-space: normal; }
+  .cmp th:first-child, .cmp td:first-child { position: sticky; left: 0; background: var(--band); z-index: 1; min-width: 9em; }
+  .cmp-wrap::after { content: "← 左右滑動看完整比較 →"; display: block; text-align: center; color: var(--muted); font-size: .78rem; padding-top: 10px; }
+}
+/* 觸控裝置：點擊範圍至少 44px */
+@media (pointer: coarse) {
+  .aud button, .chip, .parts button, .phone button, .board button, .log .acts button { min-height: 44px; }
+  .chip { padding-inline: 16px; }
+}
+@media (max-width: 560px) {
+  .band { padding-block: 52px; }
+  .head { margin-bottom: 24px; }
+  .hero h1 { font-size: clamp(2.3rem, 11vw, 3rem); }
+  .hero .sub { font-size: 1.02rem; }
+  .orb { max-width: 300px; }
+  .cta .btn { flex: 1 1 auto; justify-content: center; }
+  .stats div { padding: 20px 14px; }
+  .rule { grid-template-columns: 1fr; gap: 8px; }
+  .rule .pill { justify-self: start; }
+  .sim { padding: 16px; }
+  .log .acts { padding-left: 0; flex-wrap: wrap; }
+  .end { padding-block: 64px; }
+}
+.rv { transition: transform .7s ease; }
+.rv.pre { transform: translateY(18px); }
+
+@media (max-width: 860px) {
+  .hero .inner { grid-template-columns: 1fr; }
+  .hero { padding-top: calc(env(safe-area-inset-top, 0px) + 40px); }
+  .band { padding-block: 64px; }
+}
+</style>
+</head>
+<body>
+<div id="app" data-aud="plain">
+
+<nav class="top" aria-label="頁面導覽">
+  <div class="inner">
+    <a class="logo" href="#top"><i aria-hidden="true"></i>常智</a>
+    <div class="links">
+      <a href="#demo">互動體驗</a><a href="#features">功能</a><a href="#safety">安全</a><a href="#arch">技術架構</a><a href="#spec">規格</a><a href="#faq">常見問題</a>
+    </div>
+    <div class="aud" role="group" aria-label="說明深度">
+      <button type="button" id="aud-plain" aria-pressed="true">一般說明</button>
+      <button type="button" id="aud-tech" aria-pressed="false">技術說明</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="inner">
+    <div>
+      <div class="kicker">Classroom Voice AI</div>
+      <h1>開口<br><span>課堂就動起來</span></h1>
+      <p class="sub p-only">常智是老師的課堂語音助教。翻投影片、出題給全班、把答案畫成圖、在黑板上一步步推導，老師只要說一句話。學生用手機掃碼就能作答，不用下載，也不用登入。</p>
+      <p class="sub t-only">即時語音代理：OpenAI Realtime（WebRTC）負責聽說與 function calling，本機 FastAPI 執行 40 個工具，涵蓋 Office COM、Windows UI Automation、R 統計、Three.js 3D 與 Firestore 即時作答。金鑰全部留在伺服器端。</p>
+      <div class="cta">
+        <a class="btn primary" href="#demo">立即體驗</a>
+        <a class="btn" href="#arch">看技術架構</a>
+      </div>
+    </div>
+    <div>
+      <div class="orb">
+        <canvas id="orb" width="920" height="920" aria-hidden="true"></canvas>
+        <div class="label"><div><b>常智</b><small id="orb-state">待命中</small></div></div>
+      </div>
+      <div class="try" role="group" aria-label="試著對常智說">
+        <button class="chip" type="button" data-say="0">「下一頁」</button>
+        <button class="chip" type="button" data-say="1">「出一題類題」</button>
+        <button class="chip" type="button" data-say="2">「切換台語模式」</button>
+      </div>
+      <p class="say-line" id="say-line" aria-live="polite">點上面任一句話，聽聽常智怎麼回應。</p>
+    </div>
+  </div>
+</header>
+
+<div class="inner">
+  <div class="stats">
+    <div><b>40</b><span>種語音可觸發的功能</span></div>
+    <div><b>0</b><span>學生需要安裝的 App</span></div>
+    <div><b>2</b><span>語言模式：華語、台語</span></div>
+    <div><b>62</b><span>項自動測試全部通過</span></div>
+  </div>
+</div>
+
+<section class="band" id="demo">
+  <div class="inner">
+    <div class="head rv">
+      <div class="kicker">Interactive Demo</div>
+      <h2 class="h2">說一句，看投影畫面怎麼變</h2>
+      <p class="sub">左邊選一句老師常說的話，右邊是教室大螢幕會出現的畫面。投票那一題，你可以在手機上親自作答。</p>
+    </div>
+    <div class="demo">
+      <div class="cmds" role="group" aria-label="選擇指令" id="cmds"></div>
+      <div>
+        <div class="screen" aria-live="polite">
+          <div class="screen-bar"><i aria-hidden="true"></i>常智｜課堂 AI 助教<span class="tag" id="scr-tag">文字雲</span></div>
+          <div class="stagearea" id="stage"></div>
+          <div class="dialog">
+            <div class="bub t"><em>老師</em><span id="d-t"></span></div>
+            <div class="bub a"><em>常智</em><span id="d-a"></span></div>
+          </div>
+        </div>
+        <p class="note">畫面為示意，作答人數與內容是範例；實際使用時由學生作答與 AI 即時產生。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt" id="features">
+  <div class="inner">
+    <div class="head rv">
+      <div class="kicker">Features</div>
+      <h2 class="h2">一位助教，涵蓋整堂課</h2>
+      <p class="sub">從上課、互動、講解到下課後的紀錄。切換到「技術說明」可以看每項功能背後的實作。</p>
+    </div>
+    <div class="feats">
+      <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div><h3>簡報與檔案</h3><p>「打開第三章簡報」「下一頁」。翻到有題目的頁面，自動派給學生。</p><p class="t-only">PowerPoint COM（pywin32）。<code>open_file</code>、<code>goto_slide</code>；換頁讀取頁面文字偵測題目。</p></div>
+      <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><h3>全班即時作答</h3><p>文字雲、單選、多選、計算題。學生掃碼輸入暱稱即可，每人限答一次。</p><p class="t-only">Firestore 即時監聽；答案以裝置 ID 為文件 ID，規則只允許 create，達成一人一票。</p></div>
+      <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg></div><h3>答案分析</h3><p>答案即時畫成圖，正確選項標綠。說「為什麼大家這樣答」，常智會指出迷思概念。</p><p class="t-only">R plumber 計算統計與斷詞；R 未啟動時改用 Python。<code>explain_results</code> 用強模型分析。</p></div>
+      <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="14" rx="1"/><path d="M6 9h5M6 13h9"/></svg></div><h3>黑板推導</h3><p>推導逐行出現，每一步先問學生，老師說「下一步」才繼續。</p><p class="t-only">強模型輸出 LaTeX 步驟 JSON，前端 KaTeX 排版。<code>blackboard</code>／<code>blackboard_next</code>。</p></div>
+      <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 12l9-5M12 12v10M12 12L3 7"/></svg></div><h3>3D 立體教具</h3><p>「投影一個動物細胞」，說到哪個部位就轉過去放大。</p><p class="t-only">強模型產生 Three.js 程式碼，於 sandbox iframe 加 CSP 執行，聚焦以 postMessage 傳遞。</p></div>
+      <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3L3 8l5 5M16 11l5 5-5 5M14 4l-4 16"/></svg></div><h3>統計驗證</h3><p>「用 R 驗證中央極限定理」，現場寫程式、執行、出圖。</p><p class="t-only">黑名單檢查後在 callr 子行程執行，10 秒逾時，僅載入 ggplot2。</p></div>
+      <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg></div><h3>地圖路線</h3><p>「從台北車站到北科大怎麼走」，投影真實路線、距離與時間。</p><p class="t-only">伺服器呼叫 Google Routes API，只送折線座標到前端，Leaflet 加 OSM 繪製。</p></div>
+      <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 14h6M9 18h4"/></svg></div><h3>Word 考卷解題</h3><p>「解第 3 題並寫進去」，紅字插在題目下方，不自動存檔。</p><p class="t-only">Word COM 依題號段落定位；<code>save_word</code> 需口頭確認。</p></div>
+      <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M9 21l3-4 3 4"/><path d="M8 10l2 2 4-4"/></svg></div><h3>操作電腦</h3><p>「打開 Excel」「按插入」「輸入：今天作業是第五章」。常智全螢幕時也作用在剛才的視窗。</p><p class="t-only">pywinauto UI Automation 依名稱找元件；中文以剪貼簿貼上並還原；背景追蹤前景視窗。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="safety">
+  <div class="inner">
+    <div class="head rv">
+      <div class="kicker">Safety by Design</div>
+      <h2 class="h2">會動手，但不會自作主張</h2>
+      <p class="sub">規則寫在程式裡，不只靠 AI 自律。右邊可以試著下指令，看常智怎麼處理。</p>
+    </div>
+    <div class="safe">
+      <div class="rules">
+        <div class="rule rv"><span class="pill amber">先確認</span><div><h4>重要動作一定先問</h4><p class="p-only">寄信、刪檔、存檔、按「送出」「刪除」類按鈕前，老師要口頭說「確定」。確認只對同一個目標有效。</p><p class="t-only">第一次呼叫只回傳提示並寫入 <code>pending_confirm</code>；第二次須帶相同目標加 <code>confirmed=true</code>。按鈕名稱以 RISKY_BUTTON 正規式判斷。</p></div></div>
+        <div class="rule rv"><span class="pill red">拒絕</span><div><h4>個資與密碼不碰</h4><p class="p-only">不在密碼欄位打字；內容有身分證字號、帳密、卡號時直接拒絕。</p><p class="t-only"><code>guard_args</code> 以正規式偵測身分證、卡號、「密碼：」；密碼欄位以 UIA <code>CurrentIsPassword</code> 判斷。</p></div></div>
+        <div class="rule rv"><span class="pill cyan">保護</span><div><h4>敏感畫面不截圖</h4><p class="p-only">登入頁、網路銀行、密碼管理器的視窗，主動觀察與讀螢幕一律跳過。</p><p class="t-only">依視窗標題判斷敏感視窗；視覺模型輸出再經 <code>redact</code> 遮蔽一次。</p></div></div>
+        <div class="rule rv"><span class="pill cyan">保護</span><div><h4>金鑰不出筆電</h4><p class="p-only">學生手機和投影網頁都拿不到任何金鑰。</p><p class="t-only">瀏覽器只取得短效 Realtime client secret；學生端設定由 Firebase Hosting <code>init.json</code> 提供。</p></div></div>
+      </div>
+      <div class="sim">
+        <div class="kicker">試試看</div>
+        <div class="try" role="group" aria-label="安全情境">
+          <button class="chip" type="button" data-sim="del">「把期中考.docx 刪掉」</button>
+          <button class="chip" type="button" data-sim="pwd">「輸入：密碼：abc123」</button>
+          <button class="chip" type="button" data-sim="send">「按送出」</button>
+          <button class="chip" type="button" data-sim="ok">「按插入」</button>
+        </div>
+        <div class="log" id="log" aria-live="polite"><div class="bub a"><em>常智</em><span>選一句指令，看看哪些動作會先確認、哪些會被拒絕。</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt" id="arch">
+  <div class="inner">
+    <div class="head rv">
+      <div class="kicker">Architecture</div>
+      <h2 class="h2">老師的筆電就是控制中心</h2>
+      <p class="sub">點任一個元件看說明，或按「播放」看老師說一句話之後，資料怎麼在系統裡流動。</p>
+    </div>
+    <div class="arch" id="nodes">
+      <div class="zone"><h4>CLASSROOM<b>教室</b></h4>
+        <button class="node" type="button" data-n="mic"><span>老師的聲音</span><small>麥克風</small></button>
+        <button class="node" type="button" data-n="ui"><span>投影畫面</span><small>Edge 全螢幕網頁</small></button>
+        <button class="node" type="button" data-n="phone"><span>學生手機</span><small>Firebase Hosting</small></button>
+      </div>
+      <div class="zone"><h4>LAPTOP<b>老師筆電</b></h4>
+        <button class="node" type="button" data-n="srv"><span>常智主程式</span><small>FastAPI · 40 tools</small></button>
+        <button class="node" type="button" data-n="r"><span>統計服務</span><small>R plumber :8787</small></button>
+        <button class="node" type="button" data-n="pc"><span>電腦操作</span><small>Office COM · UIA</small></button>
+      </div>
+      <div class="zone"><h4>CLOUD<b>雲端服務</b></h4>
+        <button class="node" type="button" data-n="rt"><span>即時語音</span><small>OpenAI Realtime</small></button>
+        <button class="node" type="button" data-n="llm"><span>思考模型</span><small>gpt-5-mini / gpt-5</small></button>
+        <button class="node" type="button" data-n="fs"><span>作答資料庫</span><small>Firestore asia-east1</small></button>
+        <button class="node" type="button" data-n="map"><span>地圖路線</span><small>Google Routes API</small></button>
+      </div>
+    </div>
+    <div class="detail" id="detail" aria-live="polite"></div>
+    <div class="journey">
+      <div class="journey-top"><h3>一句話的旅程</h3><button class="btn" type="button" id="play">播放</button><span class="note" style="margin:0">範例：「收卷，看結果」</span></div>
+      <ol id="jsteps">
+        <li>老師說話，聲音經 WebRTC 直接送到 OpenAI Realtime</li>
+        <li>Realtime 聽懂意思，決定呼叫「收卷」與「看結果」工具</li>
+        <li>投影網頁把工具請求轉給筆電上的常智主程式</li>
+        <li>主程式從 Firestore 取答案，交給 R 算統計</li>
+        <li>圖表推上投影畫面，常智用語音說出重點</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="spec">
+  <div class="inner">
+    <div class="head rv">
+      <div class="kicker">Specifications</div>
+      <h2 class="h2">規格</h2>
+    </div>
+    <div class="spec-wrap">
+      <table class="spec">
+        <tbody>
+          <tr><th>教師端環境</th><td>Windows 11 筆電、Microsoft Edge、Microsoft Office（PowerPoint、Word）<span class="t-only">；Python 3.11 以上，選配 R 4.x</span></td></tr>
+          <tr><th>學生端環境</th><td>任何有瀏覽器的手機或平板，掃 QR code 即用，免安裝、免帳號</td></tr>
+          <tr><th>語音</th><td>華語、台語；可隨時插話打斷<span class="t-only">。<code>gpt-realtime</code>，server VAD，<code>gpt-4o-mini-transcribe</code> 轉寫</span></td></tr>
+          <tr><th>AI 模型</th><td>對話用快速模型，推導與出題用強模型<span class="t-only">。<code>gpt-5-mini</code>（minimal effort）／<code>gpt-5</code>（low effort）</span></td></tr>
+          <tr><th>題型</th><td>文字雲、單選、多選、計算題</td></tr>
+          <tr><th>投影內容</th><td>統計圖、黑板推導、3D 模型、R 圖表、地圖路線、照片投影</td></tr>
+          <tr><th>電腦操作</th><td>開程式與檔案、切換視窗、快捷鍵、中文輸入、依名稱按按鈕、捲動、音量</td></tr>
+          <tr><th>資料存放</th><td>作答資料存於 Google 雲端台灣機房；課後報告存於老師筆電<span class="t-only">。Firestore <code>asia-east1</code>；PDF 存 <code>reports/</code></span></td></tr>
+          <tr><th>離線備援</th><td>沒有 AI 金鑰時可用文字指令操作；沒有雲端時學生可連同一 Wi-Fi 作答</td></tr>
+          <tr><th>品質驗證</th><td>62 項自動測試，含 PowerPoint、Word、小算盤實機操作</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band alt" id="compare">
+  <div class="inner">
+    <div class="head rv">
+      <div class="kicker">Comparison</div>
+      <h2 class="h2">跟常用工具有什麼不同</h2>
+      <p class="sub">以類型比較，不指特定產品。</p>
+    </div>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th>能力</th><th class="us">常智</th><th>即時投票平台</th><th>AI 聊天機器人</th><th>簡報遙控器</th></tr></thead>
+        <tbody>
+          <tr><td>用說的操作</td><td class="us y">●</td><td class="n">—</td><td class="m">部分</td><td class="n">—</td></tr>
+          <tr><td>學生免登入作答</td><td class="us y">●</td><td class="m">視平台</td><td class="n">—</td><td class="n">—</td></tr>
+          <tr><td>答案即時分析迷思</td><td class="us y">●</td><td class="m">部分</td><td class="n">—</td><td class="n">—</td></tr>
+          <tr><td>現場推導、出類題</td><td class="us y">●</td><td class="n">—</td><td class="y">●</td><td class="n">—</td></tr>
+          <tr><td>直接操作簡報與 Word</td><td class="us y">●</td><td class="n">—</td><td class="n">—</td><td class="m">翻頁</td></tr>
+          <tr><td>操作前強制確認</td><td class="us y">●</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="faq">
+  <div class="inner">
+    <div class="head rv">
+      <div class="kicker">FAQ</div>
+      <h2 class="h2">常見問題</h2>
+    </div>
+    <div class="faq">
+      <details><summary>需要付費嗎？</summary><p>語音與 AI 模型使用 OpenAI API，依實際用量計費；地圖使用 Google Routes API，也依用量計費。學生作答用的 Firebase 在一般班級用量下通常落在免費額度內。</p></details>
+      <details><summary>學生需要帳號或安裝 App 嗎？</summary><p>不需要。學生用手機掃投影畫面上的 QR code，輸入暱稱就能作答，同一題每人只能答一次。</p></details>
+      <details><summary>常智會不會亂操作我的電腦？</summary><p>刪檔、寄信、存檔、按「送出」這類動作，常智一定先口頭詢問，老師說「確定」才執行。密碼欄位不打字，含個資的內容直接拒絕。</p></details>
+      <details><summary>網路斷了怎麼辦？</summary><p>沒有 AI 連線時，可以用畫面下方的文字指令操作大部分功能。沒有雲端時，學生連上和老師筆電同一個 Wi-Fi 也能作答。</p></details>
+      <details><summary>學生的資料存在哪裡？</summary><p>作答只記錄暱稱和答案，存在 Google 雲端台灣機房；其他學生看不到彼此的答案。課後報告存在老師自己的筆電。</p></details>
+      <details><summary>Mac 或 Chromebook 可以用嗎？</summary><p>目前不行。操作簡報、Word 和其他程式的功能依賴 Windows 與 Microsoft Office，教師端需要 Windows 筆電。學生端則任何裝置都可以。</p></details>
+      <details><summary>現在可以正式上課使用嗎？</summary><p>目前是原型。各項功能都已實際測試，但還沒在真實課堂長時間使用，建議第一次上課前先完整演練一次。</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="end">
+  <div class="inner">
+    <div class="kicker">Changchih</div>
+    <h2 class="h2">讓老師留在學生面前</h2>
+    <p class="sub">電腦的事交給常智，老師專心教學。</p>
+    <div class="cta"><a class="btn primary" href="#demo">再體驗一次</a><a class="btn" href="#top">回到頂端</a></div>
+  </div>
+</section>
+
+<footer><div class="inner"><span>常智 課堂 AI 語音助教 · 原型版本</span><span>由廖常智設計與建置</span></div></footer>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const app = $('app');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 受眾切換 ---------- */
+  function setAud(a) {
+    app.dataset.aud = a;
+    $('aud-plain').setAttribute('aria-pressed', String(a === 'plain'));
+    $('aud-tech').setAttribute('aria-pressed', String(a === 'tech'));
+    try { localStorage.setItem('cc-aud', a); } catch {}
+    showNode(curNode);
+  }
+  $('aud-plain').onclick = () => setAud('plain');
+  $('aud-tech').onclick = () => setAud('tech');
+
+  /* ---------- Hero 圓環 ---------- */
+  const cv = $('orb'), cx = cv.getContext('2d');
+  let state = 'idle', energy = 0, target = 0, phase = 0;
+  const colors = { idle: '63,208,230', listening: '139,226,154', speaking: '244,122,166', thinking: '242,184,75' };
+  function drawOrb() {
+    const W = cv.width, R = W * 0.33;
+    energy += (target - energy) * 0.08; phase += reduce ? 0 : 0.018;
+    cx.clearRect(0, 0, W, W);
+    const c = colors[state];
+    const g = cx.createRadialGradient(W/2, W/2, R * 0.2, W/2, W/2, R * 1.3);
+    g.addColorStop(0, `rgba(${c},.10)`); g.addColorStop(1, 'rgba(0,0,0,0)');
+    cx.fillStyle = g; cx.fillRect(0, 0, W, W);
+    for (let k = 0; k < 4; k++) {
+      cx.beginPath();
+      for (let i = 0; i <= 240; i++) {
+        const a = (i / 240) * Math.PI * 2;
+        const r = R + Math.sin(a * (4 + k) + phase * (1 + k * .5)) * (6 + energy * 46) * (1 - k * .18);
+        const x = W/2 + r * Math.cos(a), y = W/2 + r * Math.sin(a);
+        i ? cx.lineTo(x, y) : cx.moveTo(x, y);
+      }
+      cx.strokeStyle = `rgba(${c},${.85 - k * .18})`; cx.lineWidth = 4 - k * .8;
+      cx.shadowColor = `rgba(${c},1)`; cx.shadowBlur = 30; cx.stroke();
+    }
+    cx.shadowBlur = 0;
+    requestAnimationFrame(drawOrb);
+  }
+  drawOrb();
+  const STATE_TXT = { idle: '待命中', listening: '聆聽中', thinking: '思考中', speaking: '說話中' };
+  function setOrb(s, e) { state = s; target = e; $('orb-state').textContent = STATE_TXT[s]; }
+  const SAYS = [
+    ['下一頁', '好，翻到第 6 頁。這頁有一題選擇題，已經派給學生了。'],
+    ['出一題類題', '好，我把題目裡的數字換掉，出一題同樣觀念的新題目，要派給學生嗎？'],
+    ['切換台語模式', '好，接落來我用台語講，有需要閣切轉來華語。'],
+  ];
+  let sayTimer = [];
+  document.querySelectorAll('[data-say]').forEach((b) => b.onclick = () => {
+    sayTimer.forEach(clearTimeout); sayTimer = [];
+    document.querySelectorAll('[data-say]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    const [t, a] = SAYS[+b.dataset.say];
+    $('say-line').innerHTML = `老師：「${t}」`;
+    setOrb('listening', .6);
+    sayTimer.push(setTimeout(() => setOrb('thinking', .25), 900));
+    sayTimer.push(setTimeout(() => { setOrb('speaking', .9); $('say-line').innerHTML = `老師：「${t}」<br><b>常智：${a}</b>`; }, 1600));
+    sayTimer.push(setTimeout(() => setOrb('idle', 0), 4600));
+  });
+
+  /* ---------- 互動體驗 ---------- */
+  const SCENES = [
+    { key: 'cloud', group: '即時互動', cmd: '出一題文字雲', tag: '文字雲', t: '出一題文字雲：說到光合作用，你想到什麼？', a: '已收到 28 份回答，最多人寫「陽光」，也有人寫「氧氣是原料」，這是常見迷思。', render: renderCloud },
+    { key: 'vote', group: '即時互動', cmd: '單選題，看結果', tag: '單選題', t: '出一題單選，等一下看結果。', a: '目前 28 人作答，正確答案是 A，已標成綠色。換你在手機上作答看看。', render: renderVote },
+    { key: 'board', group: '講解', cmd: '黑板推導公式解', tag: '黑板推導', t: '黑板推導一元二次方程式的公式解。', a: '第一步先把 x² 的係數變成 1。同學，下一步該怎麼做？', render: renderBoard },
+    { key: 'cell', group: '講解', cmd: '投影動物細胞', tag: '3D 教具', t: '投影一個動物細胞，介紹細胞核。', a: '這是動物細胞。細胞核在中間，裡面有遺傳物質 DNA。點右邊的部位可以切換。', render: renderCell },
+    { key: 'map', group: '講解', cmd: '地圖路線', tag: '地圖', t: '從台北車站到北科大怎麼走？', a: '路線已經畫出來了，距離和時間顯示在下方。', render: renderMap },
+    { key: 'word', group: '操作電腦', cmd: '切到 Word，按插入', tag: '電腦操作', t: '切到 Word，按插入，輸入：今天作業是第五章。', a: '好了，已經切到「插入」分頁，也把文字打進去了。', render: renderWord },
+  ];
+  const cmds = $('cmds');
+  SCENES.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.className = 'cmd'; b.type = 'button'; b.innerHTML = `<small>${s.group}</small><span>「${s.cmd}」</span>`;
+    b.onclick = () => play(i); cmds.appendChild(b);
+  });
+  let typeTimer = null;
+  function play(i) {
+    const s = SCENES[i];
+    [...cmds.children].forEach((b, j) => b.setAttribute('aria-pressed', String(i === j)));
+    $('scr-tag').textContent = s.tag; $('d-t').textContent = s.t;
+    $('stage').innerHTML = ''; s.render($('stage'));
+    clearInterval(typeTimer);
+    const out = $('d-a');
+    if (reduce) { out.textContent = s.a; return; }
+    out.textContent = ''; out.classList.add('typing'); let k = 0;
+    typeTimer = setInterval(() => { out.textContent = s.a.slice(0, ++k); if (k >= s.a.length) { clearInterval(typeTimer); out.classList.remove('typing'); } }, 32);
+  }
+
+  function renderCloud(el) {
+    const words = [['陽光', 7], ['葉綠體', 5.4], ['氧氣', 4.6], ['二氧化碳', 4], ['水', 3.6], ['葡萄糖', 3.2], ['植物', 2.8], ['葉子', 2.4], ['能量', 2.2], ['氧氣是原料', 1.9], ['光反應', 1.7], ['澱粉', 1.5]];
+    const pal = ['#3fd0e6', '#f47aa6', '#8be29a', '#f2b84b', '#a7b8ff'];
+    const box = document.createElement('div'); box.className = 'cloud';
+    words.sort(() => .5 - Math.random()).forEach(([w, s], i) => {
+      const sp = document.createElement('span'); sp.textContent = w;
+      sp.style.fontSize = (0.9 + s * 0.42) + 'rem'; sp.style.color = pal[i % pal.length];
+      sp.style.animationDelay = (i * 70) + 'ms'; box.appendChild(sp);
+    });
+    el.appendChild(box);
+  }
+
+  const vote = { opts: ['A. 葡萄糖和氧氣', 'B. 二氧化碳', 'C. 水', 'D. 氮氣'], n: [17, 6, 4, 1], mine: null };
+  function renderVote(el) {
+    el.innerHTML = `<div class="vote"><div><p class="q">光合作用的產物是什麼？</p><div id="bars"></div></div>
+      <div class="phone" aria-label="學生手機"><div class="ttl">常智課堂｜暱稱：你</div><p>光合作用的產物是什麼？</p><div id="pbtns" style="display:grid;gap:8px"></div></div></div>`;
+    drawBars(); drawPhone();
+  }
+  function drawBars() {
+    const bars = $('bars'); if (!bars) return;
+    const max = Math.max(...vote.n);
+    bars.innerHTML = vote.opts.map((o, i) => `<div class="bar${i === 0 ? ' ok' : ''}"><span>${o}</span><div class="track"><div class="fill" style="width:0"></div></div><span class="n">${vote.n[i]}</span></div>`).join('');
+    requestAnimationFrame(() => bars.querySelectorAll('.fill').forEach((f, i) => f.style.width = (vote.n[i] / max * 100) + '%'));
+  }
+  function drawPhone() {
+    const p = $('pbtns'); if (!p) return;
+    p.innerHTML = vote.opts.map((o, i) => `<button type="button" data-v="${i}" ${vote.mine !== null ? 'disabled' : ''}>${o}</button>`).join('')
+      + (vote.mine !== null ? `<div class="done">已送出：${vote.opts[vote.mine].slice(0, 1)}　<button type="button" id="reset" style="padding:2px 8px">重設</button></div>` : '');
+    p.querySelectorAll('[data-v]').forEach((b) => b.onclick = () => {
+      vote.mine = +b.dataset.v; vote.n[vote.mine] += 1; drawBars(); drawPhone();
+      $('d-a').textContent = vote.mine === 0 ? `收到你的答案，現在 ${vote.n.reduce((a, b) => a + b)} 人作答。你答對了！` : `收到你的答案，現在 ${vote.n.reduce((a, b) => a + b)} 人作答。正確答案是 A，二氧化碳是原料，不是產物。`;
+    });
+    const r = $('reset'); if (r) r.onclick = () => { vote.n[vote.mine] -= 1; vote.mine = null; drawBars(); drawPhone(); };
+  }
+
+  const STEPS = [
+    ['ax² + bx + c = 0', '原式，a ≠ 0'],
+    ['x² + (b/a)x = −c/a', '兩邊同除以 a，常數項移到右邊'],
+    ['x² + (b/a)x + (b/2a)² = (b/2a)² − c/a', '兩邊加上 (b/2a)²，配成完全平方'],
+    ['(x + b/2a)² = (b² − 4ac) / 4a²', '左邊寫成平方，右邊通分'],
+    ['x + b/2a = ±√(b² − 4ac) / 2a', '兩邊開根號'],
+    ['x = (−b ± √(b² − 4ac)) / 2a', '移項，得到公式解'],
+  ];
+  let shown = 1;
+  function renderBoard(el) {
+    shown = 1;
+    el.innerHTML = `<div class="board"><h4>一元二次方程式的公式解</h4><div id="steps" style="display:grid;gap:10px"></div><div class="ctl"><button type="button" id="bnext">下一步</button><button type="button" id="breset">重來</button></div></div>`;
+    drawSteps();
+    $('bnext').onclick = () => { if (shown < STEPS.length) { shown++; drawSteps(); $('d-a').textContent = shown === STEPS.length ? '完成！這就是公式解，大家抄下來。' : `第 ${shown} 步：${STEPS[shown - 1][1]}。`; } };
+    $('breset').onclick = () => { shown = 1; drawSteps(); };
+  }
+  function drawSteps() {
+    $('steps').innerHTML = STEPS.slice(0, shown).map(([e, x], i) => `<div class="step"><span>(${i + 1})</span><span class="eq">${e}</span><small>${x}</small></div>`).join('');
+    $('bnext').disabled = shown >= STEPS.length;
+  }
+
+  const PARTS = {
+    nucleus: ['細胞核', '控制細胞的活動，裡面有遺傳物質 DNA。'],
+    mito: ['粒線體', '進行呼吸作用，產生細胞需要的能量。'],
+    er: ['內質網', '運送物質的通道，也參與蛋白質與脂質的合成。'],
+    membrane: ['細胞膜', '包住細胞，控制物質進出。'],
+  };
+  function renderCell(el) {
+    el.innerHTML = `<div class="cell" id="cellwrap"><svg viewBox="0 0 260 260" role="img" aria-label="動物細胞示意">
+      <g class="spin">
+        <ellipse class="org" data-p="membrane" cx="130" cy="130" rx="118" ry="104" fill="rgba(63,208,230,.08)" stroke="#3fd0e6" stroke-width="3"/>
+        <path class="org" data-p="er" d="M70 150 q20 -30 40 0 t40 0 t40 0" fill="none" stroke="#a7b8ff" stroke-width="5" stroke-linecap="round"/>
+        <ellipse class="org" data-p="mito" cx="80" cy="85" rx="24" ry="12" fill="#f2b84b" transform="rotate(-25 80 85)"/>
+        <ellipse class="org" data-p="mito" cx="190" cy="180" rx="22" ry="11" fill="#f2b84b" transform="rotate(30 190 180)"/>
+        <ellipse class="org" data-p="mito" cx="185" cy="80" rx="18" ry="9" fill="#f2b84b" transform="rotate(15 185 80)"/>
+        <circle class="org" data-p="nucleus" cx="135" cy="118" r="36" fill="#f47aa6" fill-opacity=".85"/>
+        <circle cx="140" cy="112" r="10" fill="#7a2d4c"/>
+      </g></svg>
+      <div class="parts"><div id="pbtn" style="display:grid;gap:6px"></div><p id="pdesc"></p></div></div>`;
+    const pb = $('pbtn');
+    Object.entries(PARTS).forEach(([k, [n]]) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.k = k; b.textContent = n; b.onclick = () => focusPart(k); pb.appendChild(b); });
+    el.querySelectorAll('.org').forEach((o) => o.addEventListener('click', () => focusPart(o.dataset.p)));
+    focusPart('nucleus', true);
+  }
+  function focusPart(k, quiet) {
+    $('cellwrap').classList.add('focus');
+    document.querySelectorAll('#cellwrap .org').forEach((o) => o.classList.toggle('on', o.dataset.p === k));
+    document.querySelectorAll('#pbtn button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.k === k)));
+    $('pdesc').textContent = PARTS[k][1];
+    if (!quiet) $('d-a').textContent = `這是${PARTS[k][0]}。${PARTS[k][1]}`;
+  }
+
+  function renderMap(el) {
+    el.innerHTML = `<div class="map"><svg viewBox="0 0 600 300" role="img" aria-label="路線示意圖">
+      <rect width="600" height="300" fill="#0e2230"/>
+      <g stroke="#1d3a4c" stroke-width="10" fill="none" stroke-linecap="round">
+        <path d="M0 210 H600"/><path d="M0 120 H600"/><path d="M140 0 V300"/><path d="M330 0 V300"/><path d="M480 0 V300"/><path d="M40 300 L260 0"/>
+      </g>
+      <path class="route" d="M120 220 L140 210 L330 210 L330 120 L470 120 L480 95" fill="none" stroke="#3fd0e6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="120" cy="220" r="10" fill="#8be29a"/><circle cx="480" cy="95" r="10" fill="#f47aa6"/>
+      <text x="84" y="252" fill="#e6f1f5" font-size="16">台北車站</text><text x="438" y="78" fill="#e6f1f5" font-size="16">北科大</text>
+    </svg><p class="note" style="text-align:center">示意圖。實際使用時，路線、距離與時間由 Google Routes API 即時計算。</p></div>`;
+  }
+
+  function renderWord(el) {
+    el.innerHTML = `<div class="word" aria-label="Word 視窗示意"><div class="rb"><span id="w-home" class="on">常用</span><span id="w-ins">插入</span><span>設計</span><span>版面配置</span><span>校閱</span></div>
+      <div class="tools" id="w-tools"><i>貼上</i><i>粗體</i><i>斜體</i><i>字型色彩</i></div>
+      <div class="page"><p>第五單元　光合作用</p><p id="w-type"></p></div></div>`;
+    if (reduce) return wordDone();
+    setTimeout(() => { $('w-home') && ($('w-home').className = ''); $('w-ins') && ($('w-ins').className = 'on'); const t = $('w-tools'); if (t) t.innerHTML = '<i>表格</i><i>圖片</i><i>圖案</i><i>圖表</i><i>文字方塊</i>'; }, 900);
+    const txt = '今天作業是第五章。'; let k = 0;
+    setTimeout(function tick() { const p = $('w-type'); if (!p) return; p.textContent = txt.slice(0, ++k); if (k < txt.length) setTimeout(tick, 110); }, 1700);
+  }
+  function wordDone() { $('w-home').className = ''; $('w-ins').className = 'on'; $('w-tools').innerHTML = '<i>表格</i><i>圖片</i><i>圖案</i><i>圖表</i><i>文字方塊</i>'; $('w-type').textContent = '今天作業是第五章。'; }
+
+  play(0);
+
+  /* ---------- 安全模擬 ---------- */
+  const log = $('log');
+  function say(who, text, cls = '') { const d = document.createElement('div'); d.className = `bub ${who} ${cls}`; d.innerHTML = `<em>${who === 't' ? '老師' : '常智'}</em><span>${text}</span>`; log.appendChild(d); return d; }
+  function acts(onYes, onNo) {
+    const d = document.createElement('div'); d.className = 'acts';
+    d.innerHTML = '<button type="button" class="yes">老師說「確定」</button><button type="button">老師說「取消」</button>';
+    const [y, n] = d.querySelectorAll('button');
+    y.onclick = () => { d.remove(); say('t', '確定。'); onYes(); };
+    n.onclick = () => { d.remove(); say('t', '取消。'); onNo(); };
+    log.appendChild(d);
+  }
+  const SIMS = {
+    del: () => { say('t', '把期中考.docx 刪掉。'); say('a', '這會刪除「期中考.docx」，確定要刪嗎？', 'warn'); acts(() => say('a', '好，已刪除「期中考.docx」。'), () => say('a', '好，不刪。')); },
+    pwd: () => { say('t', '輸入：密碼：abc123'); say('a', '這段內容含有密碼，依照安全規則我不能輸入。', 'no'); },
+    send: () => { say('t', '按送出。'); say('a', '「送出」按下去可能無法收回，確定要按嗎？', 'warn'); acts(() => say('a', '好，已按下「送出」。'), () => say('a', '好，先不送出。')); },
+    ok: () => { say('t', '按插入。'); say('a', '好，已切到 Word 的「插入」分頁。'); },
+  };
+  document.querySelectorAll('[data-sim]').forEach((b) => b.onclick = () => { log.innerHTML = ''; SIMS[b.dataset.sim](); });
+
+  /* ---------- 架構 ---------- */
+  const NODES = {
+    mic: ['老師的聲音', '老師直接對筆電說話，不用按按鈕。說到一半也可以打斷常智。', '瀏覽器 getUserMedia 取得麥克風，開啟回音消除與降噪；聲音以 WebRTC 直送 OpenAI，不經本機伺服器。'],
+    ui: ['投影畫面', '全螢幕的深色畫面，中間的圓環會隨聲音跳動，右上角固定顯示 QR code。', '原生 JavaScript。WebSocket /ws 接收伺服器推播（題目、圖表、黑板、3D、地圖）；3D 在 sandbox iframe 執行；Realtime 的 function call 由這裡轉送 POST /api/tool/{name}。'],
+    phone: ['學生手機', '掃碼、輸入暱稱就能作答，題目會自己出現在手機上。', 'Firebase Hosting 靜態頁，onSnapshot 監聽目前題目；設定由 /__/firebase/init.json 提供，程式碼不含金鑰。'],
+    srv: ['常智主程式', '在老師筆電上執行，負責真正「動手」：派題、統計、開檔、操作程式，也負責檢查安全規則。', 'Python FastAPI + uvicorn。@tool 裝飾器註冊 40 個工具並自動產生 Realtime 工具清單；call_tool 統一經 guard_args 檢查，慢工具先推播「常智正在…」。'],
+    r: ['統計服務', '把學生答案算成統計、把文字回答斷詞做成文字雲，也能執行現場寫的 R 程式畫圖。', 'R plumber（/run、/wordfreq、/choice、/numeric），8787 埠。生成程式先經黑名單，再於 callr 子行程執行，10 秒逾時。'],
+    pc: ['電腦操作', '開簡報、翻頁、在 Word 寫答案、按其他程式的按鈕。', 'PowerPoint／Word 走 COM（pywin32）；其他程式走 Windows UI Automation（pywinauto），依元件名稱比對，中文以剪貼簿貼上。'],
+    rt: ['即時語音', '負責聽懂老師說的話並用語音回答，回應幾乎沒有延遲。', 'gpt-realtime，server VAD，可打斷；伺服器向 /v1/realtime/client_secrets 取短效金鑰交給瀏覽器。'],
+    llm: ['思考模型', '需要想比較久的事交給它：推導、解題、出類題、寫程式、分析答案。', '快速模型 gpt-5-mini（reasoning effort minimal）、強模型 gpt-5（low）；輸出以 JSON 模式接回工具。'],
+    fs: ['作答資料庫', '存放題目與學生答案，學生之間看不到彼此的答案。', 'Firestore asia-east1。sessions/{sid}/questions/{qid}/answers/{clientId}；規則僅允許 get 題目、create 答案並驗證欄位。'],
+    map: ['地圖路線', '查詢真實路線、距離與交通時間。', 'Google Routes API computeRoutes 由伺服器呼叫，折線解碼後只把座標送到前端，以 Leaflet + OSM 繪製。'],
+  };
+  let curNode = 'srv';
+  function showNode(k) {
+    curNode = k; const [n, p, t] = NODES[k];
+    document.querySelectorAll('.node').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.n === k)));
+    $('detail').innerHTML = `<h4>${n}</h4><p>${app.dataset.aud === 'tech' ? t : p}</p>`;
+  }
+  document.querySelectorAll('.node').forEach((b) => b.onclick = () => showNode(b.dataset.n));
+  const JOURNEY = [['mic', 'rt'], ['rt'], ['ui', 'srv'], ['srv', 'fs', 'r'], ['ui', 'rt']];
+  let jt = [];
+  $('play').onclick = () => {
+    jt.forEach(clearTimeout); jt = [];
+    const lis = [...$('jsteps').children];
+    JOURNEY.forEach((ns, i) => jt.push(setTimeout(() => {
+      lis.forEach((li, j) => li.classList.toggle('on', j === i));
+      document.querySelectorAll('.node').forEach((b) => b.classList.toggle('lit', ns.includes(b.dataset.n)));
+    }, i * 1500)));
+    jt.push(setTimeout(() => { lis.forEach((li) => li.classList.remove('on')); document.querySelectorAll('.node').forEach((b) => b.classList.remove('lit')); }, JOURNEY.length * 1500 + 800));
+  };
+
+  /* ---------- 捲動進場（初始即可見，只做位移） ---------- */
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.remove('pre'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.rv').forEach((el) => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('pre'); io.observe(el); } });
+  }
+
+  try { setAud(localStorage.getItem('cc-aud') === 'tech' ? 'tech' : 'plain'); } catch { setAud('plain'); }
+})();
+</script>
+
+</body>
+</html>
